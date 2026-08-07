@@ -1,189 +1,201 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="oil6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stukdee Gorye的博客</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta name="description" content="Stukdee 的个人主页 - 制作小游戏、画画、看电视">
+    <link rel="icon" type="image/svg+xml" href="icon/logo.svg">
+    <title>Stukdee 的个人主页</title>
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 48px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            color: #64748b;
-            font-size: 1rem;
-            margin-bottom: 36px;
-            font-weight: 400;
-        }
-
-        .links-section {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .link-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            text-decoration: none;
-            color: #334155;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .link-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            transition: left 0.3s ease;
-            z-index: 0;
-        }
-
-        .link-item:hover::before {
-            left: 0;
-        }
-
-        .link-item:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
-            border-color: transparent;
-            color: white;
-        }
-
-        .link-item span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .platform-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer {
-            margin-top: 36px;
-            padding-top: 24px;
-            border-top: 1px solid #e2e8f0;
-            color: #94a3b8;
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 640px) {
-            .container {
-                padding: 32px 24px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .link-item {
-                padding: 14px 20px;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+    <!-- 主题样式 -->
+    <link rel="stylesheet" href="colors/oil6.css">
+    <link rel="stylesheet" href="colors/ammo-8.css">
+    <link rel="stylesheet" href="colors/cc-29.css">
+    <link rel="stylesheet" href="colors/chasm.css">
+    <link rel="stylesheet" href="colors/vinik24.css">
+    <!-- 主样式 -->
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <div class="container">
-        <h1>我是 Stukdee</h1>
-        <p class="subtitle">欢迎来到我的个人主页</p>
-        
-        <div class="links-section">
-            <a href="https://github.com/Stukdee/" class="link-item" target="_blank">
-                <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
-                <span>GitHub</span>
-            </a>
-            
-            <a href="https://space.bilibili.com/3546769633840089" class="link-item" target="_blank">
-                <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.659.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906L17.813 4.653zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/>
-                </svg>
-                <span>Bilibili</span>
-            </a>
-            
-            <a href="https://blog.csdn.net/Stukdee" class="link-item" target="_blank">
-                <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 1.5L0 11.684V22.5h8.105V12.998H6.5l5.5-4.583 5.5 4.583h-1.605V22.5H24V11.684L12 1.5z"/>
-                </svg>
-                <span>CSDN 博客</span>
-            </a>
-            
-            <a href="https://dev.to/stukdee" class="link-item" target="_blank">
-                <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .65-.08.83-.23.18-.16.27-.46.27-.9v-2.1c0-.44-.09-.74-.27-.9zm5.61 1.06c-.06-.26-.19-.46-.38-.61-.19-.15-.45-.24-.77-.27-.22-.02-.45-.01-.68.03-.23.04-.44.11-.63.22-.19.11-.35.25-.47.42-.12.17-.2.37-.24.59-.04.22-.06.45-.06.68 0 .28.03.53.08.75.05.22.14.41.26.57.12.16.27.29.45.39.18.1.39.17.62.21.23.04.47.06.71.06.41 0 .76-.07 1.06-.21.3-.14.53-.34.69-.61.16-.27.24-.58.24-.93 0-.27-.04-.51-.12-.72h-1.75zm.27 2.28c-.04.11-.12.2-.24.26-.12.07-.27.1-.45.1-.28 0-.49-.05-.64-.15-.15-.1-.25-.25-.3-.45l-.03-.17h1.66zM20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.54 13.49c-.27.18-.61.32-1.03.42-.42.1-.88.15-1.37.15H5V7.94h3.06c.49 0 .93.05 1.32.15.39.1.71.24.96.42.25.18.44.4.57.66.13.26.19.56.19.91v2.83c0 .35-.06.65-.19.91-.14.27-.33.49-.58.67zm7.04.51h-1.85V9.54h-1.76V8.38h3.61v5.62h-.06z"/>
-                </svg>
-                <span>DEV.TO</span>
-            </a>
-        </div>
-        
-        <div class="footer">
-            ✨ 探索技术，分享知识 ✨
-        </div>
-    </div>
+    <!-- 页面头部 / 导航 -->
+    <header>
+        <nav>
+            <a href="#home" class="logo">Stukdee</a>
+            <ul class="nav-links">
+                <li><a href="#about" data-i18n="nav.about">关于我</a></li>
+                <li><a href="#hobbies" data-i18n="nav.hobbies">爱好</a></li>
+                <li><a href="#social" data-i18n="nav.contact">联系方式</a></li>
+            </ul>
+
+            <!-- 主题切换器 -->
+            <div class="theme-switcher">
+                <button class="theme-btn" data-theme="oil6" title="温暖柔粉" aria-label="切换到温暖柔粉主题"></button>
+                <button class="theme-btn" data-theme="ammo-8" title="深绿自然" aria-label="切换到深绿自然主题"></button>
+                <button class="theme-btn" data-theme="cc-29" title="柔和中性" aria-label="切换到柔和中性主题"></button>
+                <button class="theme-btn" data-theme="chasm" title="赛博霓虹" aria-label="切换到赛博霓虹主题"></button>
+                <button class="theme-btn" data-theme="vinik24" title="复古怀旧" aria-label="切换到复古怀旧主题"></button>
+            </div>
+
+            <!-- 语言切换器（下拉式） -->
+            <div class="lang-switcher" id="lang-switcher">
+                <button class="lang-trigger" id="lang-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="选择语言">
+                    <span class="lang-trigger-text" id="lang-trigger-text">简体中文</span>
+                    <span class="lang-trigger-arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="lang-dropdown" id="lang-dropdown" role="listbox">
+                    <div class="lang-option" data-lang="zh-CN" role="option" aria-selected="true">
+                        <span class="lang-option-label">简体中文</span>
+                        <span class="lang-option-hello">你好世界</span>
+                    </div>
+                    <div class="lang-option" data-lang="zh-TW" role="option" aria-selected="false">
+                        <span class="lang-option-label">繁體中文</span>
+                        <span class="lang-option-hello">你好世界</span>
+                    </div>
+                    <div class="lang-option" data-lang="ja" role="option" aria-selected="false">
+                        <span class="lang-option-label">日本語</span>
+                        <span class="lang-option-hello">こんにちは世界</span>
+                    </div>
+                    <div class="lang-option" data-lang="en" role="option" aria-selected="false">
+                        <span class="lang-option-label">English</span>
+                        <span class="lang-option-hello">Hello World</span>
+                    </div>
+                    <div class="lang-option" data-lang="ru" role="option" aria-selected="false">
+                        <span class="lang-option-label">Русский</span>
+                        <span class="lang-option-hello">Привет мир</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 移动端菜单按钮 -->
+            <button class="menu-toggle" aria-label="菜单">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 首页 / Hero 区域 -->
+        <section id="home">
+            <div class="hero-content">
+                <div class="avatar">
+                    <img src="icon/head.PNG" alt="Stukdee 的头像" data-i18n-alt="alt.avatar">
+                </div>
+                <div class="hero-text">
+                    <h1 data-i18n-html="hero.greeting">你好，我是 <span class="nickname">Stukdee</span> 👋</h1>
+                    <p class="nicknames" data-i18n="hero.nicknames">别称：小克 / 果果 / 果子</p>
+                    <p class="tagline" data-i18n="hero.tagline">热爱生活，热爱创作</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section id="about">
+            <div class="section-header">
+                <h2 data-i18n="about.title">关于我</h2>
+            </div>
+            <div class="about-content">
+                <p data-i18n="about.p1">大家好！我是 Stukdee，一个喜欢创造和探索的人。我热衷于将想法变成现实，无论是通过代码、画笔还是其他方式。</p>
+                <p data-i18n="about.p2">欢迎来到我的个人主页，在这里你可以了解我的爱好，找到我的各种平台账号，和我一起交流分享！</p>
+            </div>
+        </section>
+
+        <!-- 爱好 -->
+        <section id="hobbies">
+            <div class="section-header">
+                <h2 data-i18n="hobbies.title">我的爱好</h2>
+            </div>
+            <div class="hobbies-grid">
+                <article class="hobby-card">
+                    <div class="hobby-icon">🎮</div>
+                    <h3 data-i18n="hobby.game.title">制作小游戏</h3>
+                    <p data-i18n="hobby.game.desc">喜欢用代码创造有趣的游戏体验，将想象变成可互动的作品。</p>
+                </article>
+                <article class="hobby-card">
+                    <div class="hobby-icon">🎨</div>
+                    <h3 data-i18n="hobby.art.title">画画</h3>
+                    <p data-i18n="hobby.art.desc">用画笔记录生活和灵感，享受创作过程中的宁静与快乐。</p>
+                </article>
+                <article class="hobby-card">
+                    <div class="hobby-icon">📺</div>
+                    <h3 data-i18n="hobby.tv.title">看电视</h3>
+                    <p data-i18n="hobby.tv.desc">通过影视作品放松身心，从不同的故事中获得启发和感动。</p>
+                </article>
+                <article class="hobby-card">
+                    <div class="hobby-icon">📖</div>
+                    <h3 data-i18n="hobby.books.title">研究古籍</h3>
+                    <p data-i18n="hobby.books.desc">探索古籍中的智慧与文字之美，在历史的长河中寻找启示。</p>
+                </article>
+                <article class="hobby-card">
+                    <div class="hobby-icon">🔍</div>
+                    <h3 data-i18n="hobby.search.title">仍在寻找</h3>
+                    <p data-i18n="hobby.search.desc">生活充满可能，我还在探索更多有趣的事物...</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- 社交账号 / 联系方式 -->
+        <section id="social">
+            <div class="section-header">
+                <h2 data-i18n="social.title">找到我</h2>
+                <p data-i18n="social.desc">欢迎在以下平台关注我，一起交流！</p>
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/Stukdee/" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="icon/github-142-svgrepo-com.svg" alt="Github 图标" data-i18n-alt="alt.github">
+                    <div class="social-info">
+                        <span class="social-name">Github</span>
+                        <span class="social-handle">@Stukdee</span>
+                    </div>
+                </a>
+                <a href="https://space.bilibili.com/3546769633840089" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="icon/bilibili-svgrepo-com.svg" alt="Bilibili 图标" data-i18n-alt="alt.bilibili">
+                    <div class="social-info">
+                        <span class="social-name">Bilibili</span>
+                        <span class="social-handle" data-i18n="social.bilibili">B站空间</span>
+                    </div>
+                </a>
+                <a href="https://dev.to/stukdee" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="icon/dev-to-svgrepo-com.svg" alt="devto 图标" data-i18n-alt="alt.devto">
+                    <div class="social-info">
+                        <span class="social-name">dev.to</span>
+                        <span class="social-handle">@stukdee</span>
+                    </div>
+                </a>
+                <a href="https://www.pixiv.net/users/108207052" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="icon/pixiv-svgrepo-com.svg" alt="Pixiv 图标" data-i18n-alt="alt.pixiv">
+                    <div class="social-info">
+                        <span class="social-name">Pixiv</span>
+                        <span class="social-handle">ID: 108207052</span>
+                    </div>
+                </a>
+                <a href="https://x.com/StukdeeGorye" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="icon/twitter-svgrepo-com.svg" alt="Twitter/X 图标" data-i18n-alt="alt.twitter">
+                    <div class="social-info">
+                        <span class="social-name">Twitter / X</span>
+                        <span class="social-handle">@StukdeeGorye</span>
+                    </div>
+                </a>
+                <a href="https://stukdee.itch.io/" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="icon/itch-io-svgrepo-com.svg" alt="itch.io 图标" data-i18n-alt="alt.itch">
+                    <div class="social-info">
+                        <span class="social-name">itch.io</span>
+                        <span class="social-handle">stukdee.itch.io</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p data-i18n="footer.rights">&copy; 2026 Stukdee. All rights reserved.</p>
+        <p data-i18n="footer.made">Made with ❤️</p>
+    </footer>
+
+    <!-- 脚本 -->
+    <script src="i18n.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

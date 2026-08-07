@@ -1,0 +1,186 @@
+/* ===========================
+   主题: Ammo 8 (深绿自然)
+   配色来源: colors/ammo-8.txt (8 色, 全部使用)
+   风格: 有机圆润 — 大圆角、左侧粗边框、深沉大地阴影
+   =========================== */
+
+:root[data-theme="ammo-8"] {
+    /* 背景色 */
+    --bg-primary: #040c06;       /* 1 */
+    --bg-secondary: #112318;     /* 2 */
+    --bg-tertiary: #1e3a29;      /* 3 */
+    --hero-bg: #112318;          /* 2 */
+    --section-alt-bg: #1e3a29;   /* 3 */
+
+    /* 卡片 */
+    --card-bg: #1e3a29;          /* 3 */
+    --card-bg-hover: #305d42;    /* 4 */
+    --card-shadow: rgba(4, 12, 6, 0.3);
+    --hover-shadow: rgba(4, 12, 6, 0.5);
+
+    /* 文字 */
+    --text-primary: #eeffcc;     /* 8 */
+    --text-secondary: #bedc7f;   /* 7 */
+    --text-muted: #89a257;       /* 6 */
+    --nickname-color: #89a257;   /* 6 */
+    --tagline-color: #4d8061;    /* 5 */
+
+    /* 强调色 */
+    --accent: #89a257;           /* 6 */
+    --accent-hover: #bedc7f;     /* 7 */
+    --accent-text: #040c06;      /* 1 */
+    --accent-2: #4d8061;         /* 5 */
+
+    /* 边框 & 阴影 */
+    --border: #305d42;           /* 4 */
+    --border-hover: #4d8061;     /* 5 */
+    --shadow: rgba(4, 12, 6, 0.4);
+
+    /* 导航栏 */
+    --nav-bg: #112318;           /* 2 */
+    --nav-text: #eeffcc;         /* 8 */
+    --nav-link-hover: #89a257;   /* 6 */
+
+    /* 页脚 */
+    --footer-bg: #040c06;        /* 1 */
+    --footer-text: #89a257;      /* 6 */
+
+    /* 装饰 */
+    --section-underline: #89a257; /* 6 */
+    --avatar-border: #4d8061;    /* 5 */
+
+    /* 爱好卡片 */
+    --hobby-accent-1: #89a257;   /* 6 */
+    --hobby-accent-2: #bedc7f;   /* 7 */
+    --hobby-accent-3: #4d8061;   /* 5 */
+    --hobby-accent-4: #305d42;   /* 4 */
+    --hobby-icon-bg-1: #305d42;  /* 4 */
+    --hobby-icon-bg-2: #1e3a29;  /* 3 */
+    --hobby-icon-bg-3: #305d42;  /* 4 */
+    --hobby-icon-bg-4: #1e3a29;  /* 3 */
+    --hobby-accent-5: #1e3a29;   /* 3 */
+    --hobby-icon-bg-5: #305d42;  /* 4 */
+
+    /* 社交链接 */
+    --social-hover-1: #89a257;   /* 6 */
+    --social-hover-2: #bedc7f;   /* 7 */
+    --social-hover-3: #4d8061;   /* 5 */
+    --social-hover-4: #305d42;   /* 4 */
+    --social-hover-5: #eeffcc;   /* 8 */
+    --social-hover-6: #bedc7f;   /* 7 */
+}
+
+/* ---- 独特风格: 有机自然 ---- */
+
+/* 字体: 仿宋bold — 传统厚重, 契合自然主题 */
+[data-theme="ammo-8"] body {
+    font-family: "Sky Heart Clear Serif", "PingFang SC", system-ui, serif;
+}
+
+/* 导航栏底部有机装饰线 */
+[data-theme="ammo-8"] header {
+    border-bottom: 3px solid #305d42;
+}
+
+/* 卡片: 大圆角 + 左侧粗边框(植物茎感) */
+[data-theme="ammo-8"] .hobby-card {
+    border-radius: 20px;
+    border-top: 1px solid var(--border);
+    border-left: 5px solid var(--hobby-accent-1);
+}
+[data-theme="ammo-8"] .hobby-card:nth-child(1) { border-left-color: var(--hobby-accent-1); }
+[data-theme="ammo-8"] .hobby-card:nth-child(2) { border-left-color: var(--hobby-accent-2); }
+[data-theme="ammo-8"] .hobby-card:nth-child(3) { border-left-color: var(--hobby-accent-3); }
+[data-theme="ammo-8"] .hobby-card:nth-child(4) { border-left-color: var(--hobby-accent-4); }
+[data-theme="ammo-8"] .hobby-card:nth-child(5) { border-left-color: var(--hobby-accent-5); }
+
+[data-theme="ammo-8"] .hobby-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px var(--hover-shadow);
+}
+
+/* 图标: 大圆, 有机感 */
+[data-theme="ammo-8"] .hobby-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+}
+
+/* 关于我: 大圆角, 厚边框 */
+[data-theme="ammo-8"] .about-content {
+    border-radius: 20px;
+    border-width: 2px;
+}
+
+/* 社交链接: 左侧装饰条 */
+[data-theme="ammo-8"] .social-link {
+    border-radius: 16px;
+    border-left: 4px solid var(--border);
+}
+[data-theme="ammo-8"] .social-link:nth-child(1) { border-left-color: var(--social-hover-1); }
+[data-theme="ammo-8"] .social-link:nth-child(2) { border-left-color: var(--social-hover-2); }
+[data-theme="ammo-8"] .social-link:nth-child(3) { border-left-color: var(--social-hover-3); }
+[data-theme="ammo-8"] .social-link:nth-child(4) { border-left-color: var(--social-hover-4); }
+[data-theme="ammo-8"] .social-link:nth-child(5) { border-left-color: var(--social-hover-5); }
+[data-theme="ammo-8"] .social-link:nth-child(6) { border-left-color: var(--social-hover-6); }
+
+[data-theme="ammo-8"] .social-link:hover {
+    transform: translateX(4px);
+}
+
+/* 标题下划线: 粗壮, 有机 */
+[data-theme="ammo-8"] .section-header h2::after {
+    width: 70px;
+    height: 4px;
+    border-radius: 4px;
+}
+
+/* Hero 区域: 底部装饰线 (与页脚一致) */
+[data-theme="ammo-8"] #home {
+    border-bottom: 3px solid #305d42;
+}
+
+/* 头像: 厚边框 */
+[data-theme="ammo-8"] .avatar img {
+    border-width: 6px;
+}
+
+/* 页脚: 顶部装饰线 */
+[data-theme="ammo-8"] footer {
+    border-top: 3px solid #305d42;
+}
+
+/* 语言切换器: 有机圆润 */
+[data-theme="ammo-8"] .lang-trigger {
+    border-radius: 20px;
+    border-color: #89a257;
+    background-color: #112318;
+    color: #eeffcc;
+}
+
+[data-theme="ammo-8"] .lang-trigger:hover {
+    border-color: #1e3a29;
+    box-shadow: 0 2px 8px rgba(48, 93, 66, 0.2);
+}
+
+[data-theme="ammo-8"] .lang-dropdown {
+    border-radius: 16px;
+    border-color: #89a257;
+    background-color: #112318;
+    color: #eeffcc;
+}
+
+[data-theme="ammo-8"] .lang-option {
+    border-radius: 12px;
+}
+
+[data-theme="ammo-8"] .lang-option:hover {
+    background-color: rgba(137, 162, 87, 0.25);
+}
+
+[data-theme="ammo-8"] .lang-option.active {
+    background-color: #89a257;
+    color: #040c06;
+    border-left: 3px solid #1e3a29;
+}

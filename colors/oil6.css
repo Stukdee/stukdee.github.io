@@ -1,0 +1,178 @@
+/* ===========================
+   主题: Oil 6 (温暖柔粉 - 默认)
+   配色来源: colors/oil6.txt (6 色, 全部使用)
+   风格: 柔软舒适 — 大圆角、柔和阴影、温暖圆润
+   =========================== */
+
+:root[data-theme="oil6"],
+:root {
+    /* 背景色 */
+    --bg-primary: #fbf5ef;       /* 1 */
+    --bg-secondary: #f2d3ab;     /* 2 */
+    --bg-tertiary: #c69fa5;      /* 3 */
+    --hero-bg: #f2d3ab;          /* 2 */
+    --section-alt-bg: #c69fa5;   /* 3 */
+
+    /* 卡片 */
+    --card-bg: #ffffff;
+    --card-bg-hover: #fbf5ef;    /* 1 */
+    --card-shadow: rgba(73, 77, 126, 0.1);
+    --hover-shadow: rgba(39, 39, 68, 0.2);
+
+    /* 文字 */
+    --text-primary: #272744;     /* 6 */
+    --text-secondary: #494d7e;   /* 5 */
+    --text-muted: #8b6d9c;       /* 4 */
+    --nickname-color: #8b6d9c;   /* 4 */
+    --tagline-color: #494d7e;    /* 5 */
+
+    /* 强调色 */
+    --accent: #8b6d9c;           /* 4 */
+    --accent-hover: #c69fa5;     /* 3 */
+    --accent-text: #fbf5ef;      /* 1 */
+    --accent-2: #494d7e;         /* 5 */
+
+    /* 边框 & 阴影 */
+    --border: #c69fa5;           /* 3 */
+    --border-hover: #494d7e;     /* 5 */
+    --shadow: rgba(39, 39, 68, 0.1);
+
+    /* 导航栏 */
+    --nav-bg: #272744;           /* 6 */
+    --nav-text: #fbf5ef;         /* 1 */
+    --nav-link-hover: #c69fa5;   /* 3 */
+
+    /* 页脚 */
+    --footer-bg: #272744;        /* 6 */
+    --footer-text: #f2d3ab;      /* 2 */
+
+    /* 装饰 */
+    --section-underline: #494d7e; /* 5 */
+    --avatar-border: #8b6d9c;    /* 4 */
+
+    /* 爱好卡片 */
+    --hobby-accent-1: #8b6d9c;   /* 4 */
+    --hobby-accent-2: #c69fa5;   /* 3 */
+    --hobby-accent-3: #494d7e;   /* 5 */
+    --hobby-accent-4: #272744;   /* 6 */
+    --hobby-icon-bg-1: #f2d3ab;  /* 2 */
+    --hobby-icon-bg-2: #f2d3ab;  /* 2 */
+    --hobby-icon-bg-3: #c69fa5;  /* 3 */
+    --hobby-icon-bg-4: #f2d3ab;  /* 2 */
+    --hobby-accent-5: #f2d3ab;   /* 2 */
+    --hobby-icon-bg-5: #c69fa5;  /* 3 */
+
+    /* 社交链接 */
+    --social-hover-1: #8b6d9c;   /* 4 */
+    --social-hover-2: #c69fa5;   /* 3 */
+    --social-hover-3: #494d7e;   /* 5 */
+    --social-hover-4: #272744;   /* 6 */
+    --social-hover-5: #272744;   /* 6 */
+    --social-hover-6: #272744;   /* 6 */
+}
+
+/* ---- 独特风格: 柔软舒适 ---- */
+
+/* 字体: 楷书传统 — 温柔典雅, 契合柔粉主题 */
+[data-theme="oil6"] body,
+:root body {
+    font-family: "Kai Traditional", "PingFang SC", sans-serif;
+}
+
+/* 导航栏: 圆角底部感 */
+[data-theme="oil6"] header {
+    border-bottom: 2px solid #c69fa5;
+}
+
+/* 卡片: 超大圆角 + 柔和顶部色条 */
+[data-theme="oil6"] .hobby-card {
+    border-radius: 18px;
+    border-top: 4px solid var(--hobby-accent-1);
+}
+[data-theme="oil6"] .hobby-card:nth-child(1) { border-top-color: var(--hobby-accent-1); }
+[data-theme="oil6"] .hobby-card:nth-child(2) { border-top-color: var(--hobby-accent-2); }
+[data-theme="oil6"] .hobby-card:nth-child(3) { border-top-color: var(--hobby-accent-3); }
+[data-theme="oil6"] .hobby-card:nth-child(4) { border-top-color: var(--hobby-accent-4); }
+[data-theme="oil6"] .hobby-card:nth-child(5) { border-top-color: var(--hobby-accent-5); }
+
+[data-theme="oil6"] .hobby-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 28px var(--hover-shadow);
+}
+
+/* 图标: 大圆, 柔和 */
+[data-theme="oil6"] .hobby-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+}
+
+/* 关于我: 大圆角, 柔和 */
+[data-theme="oil6"] .about-content {
+    border-radius: 18px;
+}
+
+/* 社交链接: 大圆角, 柔和悬停 */
+[data-theme="oil6"] .social-link {
+    border-radius: 16px;
+}
+
+[data-theme="oil6"] .social-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px var(--hover-shadow);
+}
+
+/* 标题下划线: 柔和, 适中 */
+[data-theme="oil6"] .section-header h2::after {
+    width: 60px;
+    height: 3px;
+    border-radius: 3px;
+}
+
+/* Hero 区域: 底部柔和线 (与页脚一致) */
+[data-theme="oil6"] #home {
+    border-bottom: 2px solid #494d7e;
+}
+
+/* 头像: 厚边框, 柔和 */
+[data-theme="oil6"] .avatar img {
+    border-width: 5px;
+}
+
+/* 页脚: 柔和顶部线 */
+[data-theme="oil6"] footer {
+    border-top: 2px solid #494d7e;
+}
+
+/* Hero 标语: 柔和斜体 */
+[data-theme="oil6"] .hero-text .tagline {
+    font-style: italic;
+}
+
+/* 语言切换器: 柔软圆润 */
+[data-theme="oil6"] .lang-trigger {
+    border-radius: 16px;
+    border-color: #d4a574;
+}
+
+[data-theme="oil6"] .lang-trigger:hover {
+    border-color: #8b6d9c;
+    box-shadow: 0 3px 10px rgba(139, 109, 156, 0.15);
+}
+
+[data-theme="oil6"] .lang-dropdown {
+    border-radius: 14px;
+    border-color: #d4a574;
+}
+
+[data-theme="oil6"] .lang-option {
+    border-radius: 10px;
+}
+
+[data-theme="oil6"] .lang-option:hover {
+    background-color: rgba(139, 109, 156, 0.12);
+}
+
+[data-theme="oil6"] .lang-option.active {
+    background-color: #8b6d9c;
+}

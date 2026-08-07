@@ -1,0 +1,231 @@
+/* ===========================
+   主题: Vinik 24 (复古怀旧)
+   配色来源: colors/vinik24.txt (24 色, 全部使用)
+   风格: 经典怀旧 — 小圆角、双线边框、衬线字体、做旧质感
+   =========================== */
+
+:root[data-theme="vinik24"] {
+    /* 背景色 */
+    --bg-primary: #c5ccb8;       /* 4 */
+    --bg-secondary: #557064;     /* 20 */
+    --bg-tertiary: #9d9f7f;      /* 21 */
+    --hero-bg: #c5ccb8;          /* 4 */
+    --section-alt-bg: #9d9f7f;   /* 21 */
+
+    /* 卡片 */
+    --card-bg: #ffffff;
+    --card-bg-hover: #93a167;    /* 18 */
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --hover-shadow: rgba(111, 119, 118, 0.25);
+
+    /* 文字 */
+    --text-primary: #433455;     /* 24 */
+    --text-secondary: #6e6962;   /* 17 */
+    --text-muted: #6f6776;       /* 2 */
+    --nickname-color: #8b5580;   /* 5 */
+    --tagline-color: #7e9e99;    /* 22 */
+
+    /* 强调色 */
+    --accent: #8b5580;           /* 5 */
+    --accent-hover: #c38890;     /* 6 */
+    --accent-text: #ffffff;
+    --accent-2: #666092;         /* 8 */
+
+    /* 边框 & 阴影 */
+    --border: #9a9a97;           /* 3 */
+    --border-hover: #387080;     /* 16 */
+    --shadow: rgba(0, 0, 0, 0.12);
+
+    /* 导航栏 */
+    --nav-bg: #433455;           /* 24 */
+    --nav-text: #c5ccb8;         /* 4 */
+    --nav-link-hover: #c38890;   /* 6 */
+
+    /* 页脚 */
+    --footer-bg: #433455;        /* 24 */
+    --footer-text: #5d6872;      /* 23 */
+
+    /* 装饰 */
+    --section-underline: #68aca9; /* 15 */
+    --avatar-border: #be955c;    /* 14 */
+
+    /* 爱好卡片 */
+    --hobby-accent-1: #a593a5;   /* 7 */
+    --hobby-accent-2: #9a4f50;   /* 9 */
+    --hobby-accent-3: #c28d75;   /* 10 */
+    --hobby-accent-4: #be955c;   /* 14 */
+    --hobby-icon-bg-1: #a593a5;  /* 7 */
+    --hobby-icon-bg-2: #c28d75;  /* 10 */
+    --hobby-icon-bg-3: #be955c;  /* 14 */
+    --hobby-icon-bg-4: #387080;  /* 16 */
+    --hobby-accent-5: #7ca1c0;   /* 11 */
+    --hobby-icon-bg-5: #8d6268;  /* 13 */
+
+    /* 社交链接 */
+    --social-hover-1: #666092;   /* 8 */
+    --social-hover-2: #9a4f50;   /* 9 */
+    --social-hover-3: #7ca1c0;   /* 11 */
+    --social-hover-4: #416aa3;   /* 12 */
+    --social-hover-5: #8d6268;   /* 13 */
+    --social-hover-6: #6eaa78;   /* 19 */
+
+    /* 额外 */
+    --bg-secondary-alt: #8d6268; /* 13 */
+}
+
+/* ---- 独特风格: 复古怀旧 ---- */
+
+/* 字体: 李禹手书 — 怀旧手写, 契合复古主题 */
+[data-theme="vinik24"] body {
+    font-family: "Liyu Shoushu", "Songti SC", serif;
+}
+
+/* 导航栏: 双线底部 (经典) */
+[data-theme="vinik24"] header {
+    border-bottom: 3px double #68aca9;
+}
+
+[data-theme="vinik24"] .logo {
+    letter-spacing: 1px;
+}
+
+/* 卡片: 小圆角 + 双线边框 (复古) */
+[data-theme="vinik24"] .hobby-card {
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-top: none;
+    box-shadow: 0 4px 15px var(--card-shadow);
+    position: relative;
+}
+
+/* 顶部双色条 */
+[data-theme="vinik24"] .hobby-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background-color: var(--hobby-accent-1);
+    border-radius: 8px 8px 0 0;
+}
+[data-theme="vinik24"] .hobby-card:nth-child(1)::before { background-color: var(--hobby-accent-1); }
+[data-theme="vinik24"] .hobby-card:nth-child(2)::before { background-color: var(--hobby-accent-2); }
+[data-theme="vinik24"] .hobby-card:nth-child(3)::before { background-color: var(--hobby-accent-3); }
+[data-theme="vinik24"] .hobby-card:nth-child(4)::before { background-color: var(--hobby-accent-4); }
+[data-theme="vinik24"] .hobby-card:nth-child(5)::before { background-color: var(--hobby-accent-5); }
+
+[data-theme="vinik24"] .hobby-card {
+    padding-top: 2.5rem;
+}
+
+[data-theme="vinik24"] .hobby-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px var(--hover-shadow);
+}
+
+/* 图标: 方形 (老式) */
+[data-theme="vinik24"] .hobby-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+}
+
+/* 关于我: 虚线边框 (怀旧信件感) */
+[data-theme="vinik24"] .about-content {
+    border-radius: 8px;
+    border: 2px dashed var(--border);
+}
+
+/* 社交链接: 虚线边框 */
+[data-theme="vinik24"] .social-link {
+    border-radius: 8px;
+    border-style: dashed;
+}
+
+[data-theme="vinik24"] .social-link:nth-child(1):hover { border-style: solid; }
+[data-theme="vinik24"] .social-link:nth-child(2):hover { border-style: solid; }
+[data-theme="vinik24"] .social-link:nth-child(3):hover { border-style: solid; }
+[data-theme="vinik24"] .social-link:nth-child(4):hover { border-style: solid; }
+[data-theme="vinik24"] .social-link:nth-child(5):hover { border-style: solid; }
+[data-theme="vinik24"] .social-link:nth-child(6):hover { border-style: solid; }
+
+[data-theme="vinik24"] .social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px var(--hover-shadow);
+}
+
+/* 标题: 双线下划线 */
+[data-theme="vinik24"] .section-header h2 {
+    font-weight: 700;
+}
+
+[data-theme="vinik24"] .section-header h2::after {
+    width: 50px;
+    height: 4px;
+    border-top: 2px solid var(--section-underline);
+    border-bottom: 1px solid var(--section-underline);
+    background-color: transparent;
+    border-radius: 0;
+}
+
+/* Hero 区域: 底部双线装饰 (与页脚一致) */
+[data-theme="vinik24"] #home {
+    border-bottom: 3px double #68aca9;
+}
+
+/* 头像: 方形圆角 + 厚边框 (老照片感) */
+[data-theme="vinik24"] .avatar img {
+    border-radius: 8px;
+    border-width: 4px;
+}
+
+[data-theme="vinik24"] .hero-text .nickname {
+    font-style: italic;
+}
+
+[data-theme="vinik24"] .hero-text .tagline {
+    font-style: italic;
+}
+
+/* 页脚: 双线顶部 */
+[data-theme="vinik24"] footer {
+    border-top: 3px double #68aca9;
+}
+
+/* 语言切换器: 复古双线 */
+[data-theme="vinik24"] .lang-trigger {
+    border-radius: 4px;
+    border: 2px double #7ca1c0;
+}
+
+[data-theme="vinik24"] .lang-trigger:hover {
+    border-color: #8d6268;
+    border-style: double;
+}
+
+[data-theme="vinik24"] .lang-dropdown {
+    border-radius: 4px;
+    border: 2px double #7ca1c0;
+}
+
+[data-theme="vinik24"] .lang-option {
+    border-radius: 3px;
+}
+
+[data-theme="vinik24"] .lang-option:hover {
+    background-color: rgba(124, 161, 192, 0.15);
+    border-bottom: 1px dashed #7ca1c0;
+}
+
+[data-theme="vinik24"] .lang-option.active {
+    background-color: #7ca1c0;
+    border-bottom: 1px solid #68aca9;
+}
+
+[data-theme="vinik24"] .lang-option-hello {
+    font-style: italic;
+}

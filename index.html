@@ -1,47 +1,1751 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Stukdee的精神小屋 - 一个爱做小游戏、画画、研究古籍的猫咪爱好者" />
-  <title>Stukdee的精神小屋</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stukdee的精神小屋 ✿</title>
   <link rel="icon" type="image/svg+xml" href="icon/logo.svg" />
-  <link rel="apple-touch-icon" href="icon/head.PNG" />
-  <link rel="stylesheet" href="style.css?v=4" />
+
+  <style>
+    /* ========== Font Face ========== */
+    @font-face {
+      font-family: "Arial Unicode";
+      src: url("fonts/Arial Unicode.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ========== CSS Variables – 粉红色主题 ========== */
+    :root {
+      --font-main: "Arial Unicode", "PingFang SC", "Microsoft YaHei", sans-serif;
+
+      /* 浅色模式 — 粉白奶霜 */
+      --bg-primary: #fff6f9;
+      --bg-secondary: #ffeaf2;
+      --bg-card: #ffffff;
+      --bg-hover: #ffd9e6;
+      --text-primary: #3d1f2b;
+      --text-secondary: #7a4a5a;
+      --text-muted: #b08a96;
+      --pink-main: #ff6b8a;
+      --pink-light: #ff8fab;
+      --pink-lighter: #ffd9e3;
+      --pink-glow: rgba(255, 107, 138, 0.2);
+      --border-color: #f5d0dc;
+      --shadow-soft: 0 4px 24px rgba(255, 107, 138, 0.12);
+      --shadow-hover: 0 8px 36px rgba(255, 107, 138, 0.22);
+      --gradient-warm: linear-gradient(135deg, #ffe4ed, #ffb8cb);
+      --gradient-hero: linear-gradient(180deg, #fff6f9 0%, #ffeaf2 100%);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1f1520;
+      --bg-secondary: #2d1e2a;
+      --bg-card: #382a34;
+      --bg-hover: #4a3645;
+      --text-primary: #f5e3e8;
+      --text-secondary: #cdb1bc;
+      --text-muted: #957a86;
+      --pink-main: #ff7a96;
+      --pink-light: #ff99b0;
+      --pink-lighter: #5a3a4a;
+      --pink-glow: rgba(255, 107, 138, 0.18);
+      --border-color: #4a3545;
+      --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.35);
+      --shadow-hover: 0 8px 36px rgba(0, 0, 0, 0.5);
+      --gradient-warm: linear-gradient(135deg, #4a3545, #5a3a4a);
+      --gradient-hero: linear-gradient(180deg, #1f1520 0%, #2d1e2a 100%);
+    }
+
+    /* ========== Reset & Base ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      transition: background-color 0.4s, color 0.4s;
+      overflow-x: hidden;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ========== Floating Decor ========== */
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      font-size: 22px;
+      opacity: 0.25;
+      animation: floatUp 10s ease-in-out infinite;
+    }
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+      50% { transform: translateY(-28px) rotate(8deg); opacity: 0.4; }
+    }
+    @keyframes bounce-slow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatFadeOut {
+      0% { opacity: 0; transform: translateY(10px) scale(0.9); }
+      15% { opacity: 1; transform: translateY(0) scale(1); }
+      50% { opacity: 1; transform: translateY(-4px) scale(1); }
+      100% { opacity: 0; transform: translateY(-30px) scale(0.95); }
+    }
+
+    /* ========== Navbar ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(18px);
+      background-color: color-mix(in srgb, var(--bg-primary) 78%, transparent);
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s;
+    }
+    .nav-logo:hover img {
+      animation: wiggle 0.5s ease-in-out;
+    }
+    .nav-logo span {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 15px;
+      position: relative;
+      padding: 4px 0;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--pink-main);
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+    .nav-links a:hover {
+      color: var(--pink-main);
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .theme-toggle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      background: var(--bg-card);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s;
+    }
+    .theme-toggle:hover {
+      transform: rotate(20deg) scale(1.08);
+      border-color: var(--pink-main);
+      box-shadow: var(--shadow-soft);
+    }
+    .hamburger {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      background: var(--bg-card);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 73px;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 20px;
+      z-index: 199;
+      transform: translateY(-120%);
+      transition: transform 0.3s;
+    }
+    .mobile-menu.open {
+      transform: translateY(0);
+    }
+    .mobile-menu ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .mobile-menu a {
+      color: var(--text-primary);
+      font-size: 18px;
+      padding: 8px 0;
+      display: block;
+    }
+
+    /* ========== Hero ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 32px 60px;
+      position: relative;
+      background: var(--gradient-hero);
+      overflow: hidden;
+      z-index: 1;
+    }
+    .hero-paw {
+      position: absolute;
+      font-size: 56px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .hero-paw.p1 { top: 12%; left: 6%; transform: rotate(-15deg); }
+    .hero-paw.p2 { top: 55%; left: 4%; transform: rotate(20deg); font-size: 72px; }
+    .hero-paw.p3 { top: 22%; right: 8%; transform: rotate(15deg); font-size: 64px; }
+    .hero-paw.p4 { bottom: 18%; right: 6%; transform: rotate(-20deg); }
+
+    .hero-content {
+      max-width: 860px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: slideInUp 1s ease-out;
+    }
+    .hero-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+    .hero-avatar {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 4px solid var(--bg-card);
+      box-shadow: var(--shadow-hover);
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      cursor: pointer;
+      background: var(--bg-card);
+    }
+    .hero-avatar:hover {
+      transform: scale(1.08) rotate(-4deg);
+    }
+    .hero-avatar-ring {
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      right: -12px;
+      bottom: -12px;
+      border: 2px dashed var(--pink-light);
+      border-radius: 50%;
+      animation: rotate 20s linear infinite;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-emoji-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      font-size: 28px;
+    }
+    .hero-emoji-row span {
+      display: inline-block;
+      animation: bounce-slow 2.4s ease-in-out infinite;
+    }
+    .hero-emoji-row span:nth-child(2) { animation-delay: 0.2s; }
+    .hero-emoji-row span:nth-child(3) { animation-delay: 0.4s; }
+    .hero-emoji-row span:nth-child(4) { animation-delay: 0.6s; }
+    .hero-emoji-row span:nth-child(5) { animation-delay: 0.8s; }
+
+    .hero-title {
+      font-size: clamp(30px, 6vw, 52px);
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--pink-main), var(--pink-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(16px, 2.4vw, 22px);
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      line-height: 1.8;
+    }
+    .hero-tagline {
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 14px 34px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink-main), var(--pink-light));
+      color: white;
+      box-shadow: 0 4px 18px var(--pink-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px var(--pink-glow);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+    }
+    .btn-secondary:hover {
+      border-color: var(--pink-main);
+      color: var(--pink-main);
+      transform: translateY(-3px);
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 28px;
+      animation: bounce-slow 2s ease-in-out infinite;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    /* ========== Section Common ========== */
+    section {
+      padding: 80px 32px;
+      position: relative;
+      z-index: 1;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-eyebrow {
+      display: inline-block;
+      padding: 6px 20px;
+      background: var(--bg-secondary);
+      color: var(--pink-main);
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: bold;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: clamp(14px, 1.8vw, 18px);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ========== About ========== */
+    .about-section {
+      background: var(--bg-primary);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-illustration {
+      background: var(--gradient-warm);
+      border-radius: 30px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    /* 替换 big-cat 为头像样式 */
+    .big-cat {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: inline-block;
+      margin-bottom: 12px;
+      border: 3px solid var(--bg-card);
+      box-shadow: var(--shadow-soft);
+    }
+    .about-illustration h3 {
+      font-size: 22px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .about-illustration p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .floating-sticker {
+      position: absolute;
+      background: var(--bg-card);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 13px;
+      box-shadow: var(--shadow-soft);
+      animation: bounce-slow 3s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .sticker-1 { top: 16px; right: -16px; animation-delay: 0s; }
+    .sticker-2 { bottom: 36px; left: -24px; animation-delay: 1s; }
+    .sticker-3 { top: 50%; right: -36px; animation-delay: 0.6s; }
+
+    .about-content h3 {
+      font-size: 28px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .about-content p {
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      line-height: 1.9;
+    }
+    .about-names {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .name-tag {
+      padding: 6px 18px;
+      background: var(--bg-secondary);
+      border-radius: 50px;
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .name-tag:hover {
+      background: var(--pink-main);
+      color: white;
+      transform: translateY(-2px);
+    }
+    .name-tag .label {
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-right: 4px;
+    }
+    .name-tag:hover .label {
+      color: rgba(255,255,255,0.8);
+    }
+    .favorites-list {
+      list-style: none;
+      margin-top: 18px;
+    }
+    .favorites-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border-color);
+      color: var(--text-secondary);
+    }
+    .favorites-list li:last-child {
+      border-bottom: none;
+    }
+    .fav-icon {
+      font-size: 24px;
+      width: 36px;
+      text-align: center;
+    }
+
+    /* ========== Hobbies ========== */
+    .hobbies-section {
+      background: var(--bg-secondary);
+    }
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .hobby-card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .hobby-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--pink-main), var(--pink-light));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .hobby-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+    .hobby-card:hover::before {
+      transform: scaleX(1);
+    }
+    .hobby-icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+      display: inline-block;
+      transition: transform 0.4s;
+    }
+    .hobby-card:hover .hobby-icon {
+      transform: scale(1.18) rotate(6deg);
+    }
+    .hobby-card h3 {
+      font-size: 20px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .hobby-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .hobby-card.seeking {
+      border: 2px dashed var(--border-color);
+      background: transparent;
+    }
+    .hobby-card.seeking:hover {
+      border-color: var(--pink-light);
+    }
+    .hobby-card .sparkle {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 18px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .hobby-card:hover .sparkle {
+      opacity: 1;
+      animation: sparkle 1s ease-in-out infinite;
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+
+    /* ========== Social ========== */
+    .social-section {
+      background: var(--bg-primary);
+    }
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .social-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .social-card::after {
+      content: '↗';
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 16px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .social-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: var(--shadow-hover);
+    }
+    .social-card:hover::after {
+      opacity: 1;
+      transform: translate(3px, -3px);
+    }
+    .social-card img {
+      width: 44px;
+      height: 44px;
+      transition: transform 0.3s;
+      filter: none;
+    }
+    [data-theme="dark"] .social-card img {
+      filter: brightness(1.15);
+    }
+    .social-card:hover img {
+      transform: scale(1.12);
+    }
+    .social-card span {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .social-card .handle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ========== Fun ========== */
+    .fun-section {
+      background: var(--bg-secondary);
+    }
+    .fun-container {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .click-counter-box {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cat-button {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gradient-warm);
+      font-size: 0;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 24px var(--pink-glow);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cat-button .cat-emoji {
+      font-size: 60px;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+    .cat-button:hover {
+      transform: scale(1.08);
+    }
+    .cat-button:hover .cat-emoji {
+      transform: scale(0.92);
+    }
+    .cat-button:active {
+      transform: scale(0.94);
+    }
+    .click-count {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--pink-main);
+      margin-bottom: 4px;
+    }
+    .click-label {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .mood-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .mood-btn {
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      font-family: var(--font-main);
+    }
+    .mood-btn:hover,
+    .mood-btn.active {
+      border-color: var(--pink-main);
+      background: var(--pink-main);
+      color: white;
+    }
+
+    /* ========== Floating Message ========== */
+    .floating-msg {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      padding: 8px 20px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-soft);
+      font-size: 14px;
+      max-width: 200px;
+      text-align: center;
+      animation: floatFadeOut 2.2s ease-out forwards;
+    }
+
+    /* ========== Custom Modal ========== */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-box {
+      background: var(--bg-card);
+      border-radius: 32px;
+      padding: 32px 28px 28px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid var(--pink-light);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .modal-message {
+      font-size: 18px;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .modal-message .highlight-emoji {
+      font-size: 22px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .modal-btn {
+      padding: 10px 28px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-main);
+      min-width: 100px;
+    }
+    .modal-btn-primary {
+      background: linear-gradient(135deg, var(--pink-main), var(--pink-light));
+      color: white;
+      box-shadow: 0 4px 14px var(--pink-glow);
+    }
+    .modal-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--pink-glow);
+    }
+    .modal-btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border: 2px solid var(--border-color);
+    }
+    .modal-btn-secondary:hover {
+      border-color: var(--pink-main);
+      color: var(--pink-main);
+      transform: translateY(-2px);
+    }
+    .modal-btn-only {
+      min-width: 140px;
+    }
+
+    /* ========== Footer ========== */
+    footer {
+      background: var(--bg-secondary);
+      padding: 36px 32px;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      position: relative;
+      z-index: 1;
+    }
+    footer p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .footer-kaomoji {
+      font-size: 18px;
+      margin-top: 10px;
+      color: var(--text-secondary);
+    }
+
+    /* ========== Back to Top ========== */
+    .back-to-top {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: var(--shadow-soft);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 1001;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .back-to-top:hover {
+      background: var(--pink-main);
+      color: white;
+      border-color: var(--pink-main);
+      transform: translateY(-3px);
+    }
+
+    /* ========== Reveal ========== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== Shooting Stars Canvas ========== */
+    .shooting-stars-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .about-illustration {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+    @media (max-width: 768px) {
+      .navbar { padding: 10px 18px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: block; }
+      section { padding: 60px 18px; }
+      .hero { padding: 100px 18px 40px; }
+      .hero-avatar { width: 140px; height: 140px; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 260px; justify-content: center; }
+      .hobbies-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .hobby-card { padding: 24px 14px; }
+      .hobby-icon { font-size: 44px; }
+      .social-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .social-card { padding: 16px 10px; }
+      .social-card img { width: 36px; height: 36px; }
+      .social-card span { font-size: 12px; }
+      .social-card .handle { display: none; }
+      .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+      .floating-sticker { font-size: 12px; padding: 4px 12px; }
+      .sticker-1 { right: -8px; }
+      .sticker-2 { left: -8px; }
+      .sticker-3 { right: -16px; }
+      .click-counter-box { padding: 28px 18px; }
+      .modal-box { padding: 24px 18px; }
+      .modal-message { font-size: 16px; }
+      .modal-btn { padding: 8px 20px; font-size: 14px; min-width: 80px; }
+    }
+    @media (max-width: 480px) {
+      .hobbies-grid { grid-template-columns: 1fr; }
+      .social-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero-emoji-row { font-size: 22px; gap: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- 顶部栏 -->
-  <header class="topbar">
-    <div class="brand">
-      <img src="icon/logo.svg" alt="logo" class="brand-logo" />
-      <span class="brand-title">Stukdee的精神小屋</span>
-    </div>
-    <button id="themeToggle" class="theme-toggle" aria-label="切换主题">
-      <span class="theme-icon-light">☀️</span>
-      <span class="theme-icon-dark">🌙</span>
-    </button>
-  </header>
+  <div id="root"></div>
 
-  <!-- 主舞台：3D 卡片轮播 -->
-  <main class="stage">
-    <div id="carousel" class="carousel">
-      <div id="ring" class="ring"></div>
-    </div>
+  <!-- React + Babel (CDN) -->
+  <script src="https://sf3-scmcdn-cn.feishucdn.com/obj/feishu-static/miaoda/coding-unpkg-sdk/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://sf3-scmcdn-cn.feishucdn.com/obj/feishu-static/miaoda/coding-unpkg-sdk/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://sf3-scmcdn-cn.feishucdn.com/obj/feishu-static/miaoda/coding-unpkg-sdk/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 
-    <!-- 滚动提示 -->
-    <div class="scroll-hint" id="scrollHint">
-      <span>滚 / 滑 动 来翻转卡片</span>
-      <div class="hint-arrow">↕</div>
-    </div>
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, createContext, useContext, useRef } = React;
 
-    <!-- 进度指示 -->
-    <div class="progress" id="progress"></div>
-  </main>
+    // ===== 社交数据 =====
+    const socialLinks = [
+      { name: "GitHub", handle: "@Stukdee", url: "https://github.com/Stukdee/", icon: "icon/github.svg" },
+      { name: "Bilibili", handle: "B站主页", url: "https://space.bilibili.com/3546769633840089", icon: "icon/bilibili.svg" },
+      { name: "抖音", handle: "81963247021", url: "https://www.douyin.com/", icon: "icon/tik-tok-outlined.svg" },
+      { name: "dev.to", handle: "@stukdee", url: "https://dev.to/stukdee", icon: "icon/dev.svg" },
+      { name: "Pixiv", handle: "108207052", url: "https://www.pixiv.net/users/108207052", icon: "icon/pixiv.svg" },
+      { name: "X", handle: "@StukdeeGorye", url: "https://x.com/StukdeeGorye", icon: "icon/x.svg" },
+      { name: "itch.io", handle: "stukdee", url: "https://stukdee.itch.io/", icon: "icon/itch-io.svg" },
+      { name: "Bluesky", handle: "@stukdee", url: "https://bsky.app/profile/stukdee.bsky.social", icon: "icon/bluesky.svg" },
+      { name: "Reddit", handle: "u/StukdeeGorye", url: "https://www.reddit.com/user/StukdeeGorye/", icon: "icon/reddit.svg" },
+      { name: "Discord", handle: "Stukdee Gorye", url: "https://discord.gg/nq7uBq2M", icon: "icon/discord.svg" },
+      { name: "Huggingface", handle: "Stukdee", url: "https://huggingface.co/Stukdee", icon: "icon/huggingface.svg" },
+    ];
 
-  <footer class="footer">
-    <span>© Stukdee · 用 ✨ 和 🐱 拼装而成</span>
-  </footer>
+    // ===== 爱好数据 =====
+    const hobbies = [
+      { icon: "🎮", title: "制作小游戏", desc: "用代码创造有趣的世界，每一行都是冒险 ✨" },
+      { icon: "🎨", title: "画画", desc: "画笔是第二语言，画出心中的奇思妙想 🖌️" },
+      { icon: "📺", title: "看电视", desc: "沉浸式追剧达人，什么类型都爱看～ 🍿" },
+      { icon: "📜", title: "研究古籍", desc: "在古老文字里寻找穿越时空的智慧 📖" },
+      { icon: "🔍", title: "（仍在寻找）", desc: "还有更多爱好在路上，敬请期待... 🌱", seeking: true },
+    ];
 
-  <script src="script.js?v=3"></script>
+    // ===== 心情数据 =====
+    const moods = [
+      { emoji: "😺", label: "开心" },
+      { emoji: "😸", label: "超开心" },
+      { emoji: "😻", label: "恋爱了" },
+      { emoji: "😿", label: "有点丧" },
+      { emoji: "😾", label: "生气中" },
+      { emoji: "🙀", label: "震惊了" },
+    ];
+
+    // ===== 猫咪消息池 =====
+    const catMessages = [
+      "喵～ (｡･ω･｡)",
+      "喵喵～ 好舒服！(´▽`ʃ♡)",
+      "喵呜～ 你好温柔呀！(◕‿◕)♡",
+      "呼噜呼噜～ (๑´ㅂ`๑)",
+      "你是撸猫大师！！！Σ(っ °Д °;)っ",
+      "蹭蹭～ (ฅ´ω`ฅ)",
+      "喵喵叫～ (ฅ^•ﻌ•^ฅ)",
+      "咕噜咕噜～ (◠‿◠✿)",
+      "打滚撒娇～ (｡♥‿♥｡)",
+      "尾巴摇摇～ (◕‿◕✿)",
+      "求摸摸～ (´・ω・`)",
+      "踩奶中～ (ฅ'ω'ฅ)",
+      "伸懒腰～ (＾▽＾)",
+      "看着你～ (◠‿◠)",
+      "想出去玩～ (^･o･^)ﾉ"
+    ];
+
+    // ===== Context for Modal =====
+    const ModalContext = createContext();
+
+    // ===== 自定义 Modal 组件 =====
+    function CustomModal({ open, type, message, onConfirm, onCancel, onClose }) {
+      if (!open) return null;
+
+      const handleConfirm = () => {
+        if (onConfirm) onConfirm();
+        onClose();
+      };
+      const handleCancel = () => {
+        if (onCancel) onCancel();
+        onClose();
+      };
+
+      const icon = type === 'confirm' ? '🐱' : '🌸';
+      const confirmText = type === 'confirm' ? '好呀～' : '知道啦～';
+      const cancelText = '算啦～';
+
+      return (
+        <div className="modal-overlay" onClick={handleCancel}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+            <span className="modal-icon">{icon}</span>
+            <div className="modal-message">{message}</div>
+            <div className="modal-actions">
+              {type === 'confirm' && (
+                <button className="modal-btn modal-btn-secondary" onClick={handleCancel}>
+                  {cancelText}
+                </button>
+              )}
+              <button className="modal-btn modal-btn-primary" onClick={handleConfirm}>
+                {confirmText}
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ===== Modal Provider =====
+    function ModalProvider({ children }) {
+      const [modalState, setModalState] = useState({
+        open: false,
+        type: 'alert',
+        message: '',
+        resolve: null,
+        reject: null,
+      });
+
+      const showAlert = useCallback((message) => {
+        return new Promise((resolve) => {
+          setModalState({
+            open: true,
+            type: 'alert',
+            message: message,
+            resolve: resolve,
+            reject: null,
+          });
+        });
+      }, []);
+
+      const showConfirm = useCallback((message) => {
+        return new Promise((resolve) => {
+          setModalState({
+            open: true,
+            type: 'confirm',
+            message: message,
+            resolve: resolve,
+            reject: null,
+          });
+        });
+      }, []);
+
+      const closeModal = useCallback(() => {
+        setModalState(prev => {
+          if (prev.resolve) {
+            if (prev.type === 'confirm') {
+              prev.resolve(false);
+            } else {
+              prev.resolve();
+            }
+          }
+          return {
+            open: false,
+            type: 'alert',
+            message: '',
+            resolve: null,
+            reject: null,
+          };
+        });
+      }, []);
+
+      const handleConfirm = useCallback(() => {
+        setModalState(prev => {
+          if (prev.resolve) {
+            if (prev.type === 'confirm') {
+              prev.resolve(true);
+            } else {
+              prev.resolve();
+            }
+          }
+          return {
+            open: false,
+            type: 'alert',
+            message: '',
+            resolve: null,
+            reject: null,
+          };
+        });
+      }, []);
+
+      const handleCancel = useCallback(() => {
+        setModalState(prev => {
+          if (prev.resolve && prev.type === 'confirm') {
+            prev.resolve(false);
+          }
+          return {
+            open: false,
+            type: 'alert',
+            message: '',
+            resolve: null,
+            reject: null,
+          };
+        });
+      }, []);
+
+      const value = { showAlert, showConfirm };
+
+      return (
+        <ModalContext.Provider value={value}>
+          {children}
+          <CustomModal
+            open={modalState.open}
+            type={modalState.type}
+            message={modalState.message}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onClose={closeModal}
+          />
+        </ModalContext.Provider>
+      );
+    }
+
+    function useModal() {
+      return useContext(ModalContext);
+    }
+
+    // ===== 流星 Canvas 组件（覆盖整个上边缘和左边缘） =====
+    function ShootingStars({ isDark }) {
+      const canvasRef = useRef(null);
+      const animationRef = useRef(null);
+      const starsRef = useRef([]);
+
+      useEffect(() => {
+        if (!isDark) {
+          const canvas = canvasRef.current;
+          if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+            animationRef.current = null;
+          }
+          return;
+        }
+
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const resize = () => {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          canvas.width = w;
+          canvas.height = h;
+          canvas.style.width = w + 'px';
+          canvas.style.height = h + 'px';
+        };
+        window.addEventListener('resize', resize);
+        resize();
+
+        const STAR_COUNT = 12;
+        const BASE_ANGLE = Math.PI / 4; // 45度
+        const ANGLE_VARY = 0.08;
+        const SPEED_MIN = 5;
+        const SPEED_MAX = 9;
+
+        function createStar(w, h) {
+          // 随机选择从顶部或左侧进入
+          const fromTop = Math.random() > 0.5;
+          let x, y;
+          if (fromTop) {
+            x = Math.random() * w;
+            y = -5; // 顶部外
+          } else {
+            x = -5;
+            y = Math.random() * h;
+          }
+          const angle = BASE_ANGLE + (Math.random() - 0.5) * ANGLE_VARY;
+          const speed = SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN);
+          const vx = Math.cos(angle) * speed;
+          const vy = Math.sin(angle) * speed;
+          const length = 80 + Math.random() * 120;
+          const opacity = 0.5 + Math.random() * 0.5;
+          return { x, y, vx, vy, length, opacity };
+        }
+
+        const stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push(createStar(canvas.width, canvas.height));
+        }
+        starsRef.current = stars;
+
+        let lastTime = 0;
+        const frameRate = 1000 / 60;
+
+        function animate(time) {
+          if (!isDark) return;
+          if (time - lastTime < frameRate) {
+            animationRef.current = requestAnimationFrame(animate);
+            return;
+          }
+          lastTime = time;
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          stars.forEach(star => {
+            star.x += star.vx;
+            star.y += star.vy;
+
+            // 如果完全离开屏幕（右下或超出），重置到顶部或左侧
+            if (star.x > canvas.width + 100 || star.y > canvas.height + 100) {
+              const fromTop = Math.random() > 0.5;
+              if (fromTop) {
+                star.x = Math.random() * canvas.width;
+                star.y = -5;
+              } else {
+                star.x = -5;
+                star.y = Math.random() * canvas.height;
+              }
+              const angle = BASE_ANGLE + (Math.random() - 0.5) * ANGLE_VARY;
+              const speed = SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN);
+              star.vx = Math.cos(angle) * speed;
+              star.vy = Math.sin(angle) * speed;
+              star.length = 80 + Math.random() * 120;
+              star.opacity = 0.5 + Math.random() * 0.5;
+            }
+
+            drawStar(ctx, star);
+          });
+
+          animationRef.current = requestAnimationFrame(animate);
+        }
+
+        function drawStar(ctx, star) {
+          const { x, y, vx, vy, length, opacity } = star;
+          const angle = Math.atan2(vy, vx);
+          const tailX = x - Math.cos(angle) * length;
+          const tailY = y - Math.sin(angle) * length;
+
+          const grad = ctx.createLinearGradient(x, y, tailX, tailY);
+          grad.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
+          grad.addColorStop(0.4, `rgba(255, 220, 230, ${opacity * 0.7})`);
+          grad.addColorStop(1, `rgba(255, 200, 210, 0)`);
+
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(tailX, tailY);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5 + Math.random() * 1.5;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.9})`;
+          ctx.fill();
+
+          ctx.shadowColor = 'rgba(255, 200, 220, 0.3)';
+          ctx.shadowBlur = 15;
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 200, 220, ${opacity * 0.2})`;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        animationRef.current = requestAnimationFrame(animate);
+
+        return () => {
+          window.removeEventListener('resize', resize);
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+            animationRef.current = null;
+          }
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        };
+      }, [isDark]);
+
+      return <canvas ref={canvasRef} className="shooting-stars-canvas" />;
+    }
+
+    // ===== 浮动装饰 =====
+    function FloatingDecor() {
+      const items = [
+        { top: "8%", left: "4%", emoji: "♡", delay: "0s" },
+        { top: "22%", right: "6%", emoji: "✿", delay: "1.2s" },
+        { top: "48%", left: "2%", emoji: "★", delay: "2.5s" },
+        { top: "72%", right: "4%", emoji: "♡", delay: "0.7s" },
+        { bottom: "12%", left: "8%", emoji: "✿", delay: "1.8s" },
+      ];
+      return items.map((it, i) => (
+        <div key={i} className="floating-heart" style={{ top: it.top, bottom: it.bottom, left: it.left, right: it.right, animationDelay: it.delay }}>
+          {it.emoji}
+        </div>
+      ));
+    }
+
+    // ===== 导航栏 =====
+    function Navbar({ theme, toggleTheme, mobileOpen, setMobileOpen }) {
+      const links = [
+        { href: "#home", label: "首页" },
+        { href: "#about", label: "关于我" },
+        { href: "#hobbies", label: "爱好" },
+        { href: "#social", label: "社交" },
+        { href: "#fun", label: "互动" },
+      ];
+      return (
+        <>
+          <nav className="navbar">
+            <a href="#home" className="nav-logo">
+              <img src="icon/logo.svg" alt="logo" />
+              <span>Stukdee的精神小屋</span>
+            </a>
+            <ul className="nav-links">
+              {links.map(l => <li key={l.href}><a href={l.href}>{l.label}</a></li>)}
+            </ul>
+            <div className="nav-right">
+              <button className="theme-toggle" onClick={toggleTheme} aria-label="切换主题">
+                {theme === "light" ? "🌙" : "☀️"}
+              </button>
+              <button className="hamburger" onClick={() => setMobileOpen(!mobileOpen)}>
+                {mobileOpen ? "✕" : "☰"}
+              </button>
+            </div>
+          </nav>
+          <div className={`mobile-menu ${mobileOpen ? "open" : ""}`}>
+            <ul>
+              {links.map(l => (
+                <li key={l.href}><a href={l.href} onClick={() => setMobileOpen(false)}>{l.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        </>
+      );
+    }
+
+    // ===== Hero =====
+    function Hero() {
+      return (
+        <section className="hero" id="home">
+          <div className="hero-paw p1">🐾</div>
+          <div className="hero-paw p2">🐾</div>
+          <div className="hero-paw p3">🐾</div>
+          <div className="hero-paw p4">🐾</div>
+          <div className="hero-content">
+            <div className="hero-avatar-wrap">
+              <div className="hero-avatar-ring"></div>
+              <img className="hero-avatar" src="icon/head.PNG" alt="Stukdee头像" />
+            </div>
+            <div className="hero-emoji-row">
+              <span>🐱</span><span>🎮</span><span>🎨</span><span>📜</span><span>✨</span>
+            </div>
+            <h1 className="hero-title">欢迎来到 <span className="highlight">Stukdee的精神小屋</span></h1>
+            <p className="hero-subtitle">小克 · 果果 · 果子 的梦幻小天地  (｡◕‿◕｡)</p>
+            <p className="hero-tagline">🥛 特仑苏 · 🍫 明治巧克力 · 🐱 猫咪统治世界 ～ 一起交朋友呀！</p>
+            <div className="hero-buttons">
+              <a href="#social" className="btn btn-primary"><span>🔗</span> 找到我</a>
+              <a href="#about" className="btn btn-secondary"><span>🐱</span> 了解更多</a>
+            </div>
+          </div>
+          <a href="#about" className="scroll-indicator">↓</a>
+        </section>
+      );
+    }
+
+    // ===== About（已将 big-cat 替换为头像） =====
+    function About() {
+      return (
+        <section className="about-section" id="about">
+          <div className="container">
+            <div className="section-header reveal">
+              <span className="section-eyebrow">✨ About Me</span>
+              <h2 className="section-title">关于我</h2>
+              <p className="section-subtitle">一只热爱生活的小猫咪，正在探索这个有趣的世界</p>
+            </div>
+            <div className="about-grid">
+              <div className="about-visual reveal">
+                <div className="about-illustration">
+                  {/* 替换为头像图片 */}
+                  <img className="big-cat" src="icon/head.PNG" alt="Stukdee头像" />
+                  <h3>Hi～ 我是 Stukdee</h3>
+                  <p>也可以叫我小克、果果或者果子 (๑•̀ㅂ•́)و✧</p>
+                </div>
+                <div className="floating-sticker sticker-1"><span>🥛</span> 特仑苏粉丝</div>
+                <div className="floating-sticker sticker-2"><span>🍫</span> 明治巧克力</div>
+                <div className="floating-sticker sticker-3"><span>🐱</span> 猫咪统治世界！</div>
+              </div>
+              <div className="about-content reveal">
+                <h3>你好呀～ (｡･ω･｡)</h3>
+                <p>
+                  我是 <strong>Stukdee</strong>，也可以叫我 <strong>小克</strong>、<strong>果果</strong> 或 <strong>果子</strong>。
+                  一个充满好奇心的人，喜欢尝试各种有趣的事情。
+                </p>
+                <p>
+                  我热爱制作小游戏、画画、看电视、研究古籍…… 生活就是要不断发现新的美好！
+                </p>
+                <div className="about-names">
+                  <span className="name-tag"><span className="label">昵称</span>Stukdee</span>
+                  <span className="name-tag"><span className="label">别称</span>小克</span>
+                  <span className="name-tag"><span className="label">别称</span>果果</span>
+                  <span className="name-tag"><span className="label">别称</span>果子</span>
+                </div>
+                <ul className="favorites-list">
+                  <li><span className="fav-icon">🥛</span> 特仑苏牛奶的忠实粉丝，每天都要来一盒</li>
+                  <li><span className="fav-icon">🍫</span> 明治巧克力（特浓牛奶味最好吃！）</li>
+                  <li><span className="fav-icon">🐱</span> 喜欢猫咪！猫咪快点统治世界吧！！！</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // ===== Hobbies =====
+    function Hobbies() {
+      return (
+        <section className="hobbies-section" id="hobbies">
+          <div className="container">
+            <div className="section-header reveal">
+              <span className="section-eyebrow">🎯 Hobbies</span>
+              <h2 className="section-title">我的爱好</h2>
+              <p className="section-subtitle">生活就是要做自己喜欢的事情呀 (๑•̀ㅂ•́)و✧</p>
+            </div>
+            <div className="hobbies-grid">
+              {hobbies.map((h, i) => (
+                <div key={i} className={`hobby-card reveal ${h.seeking ? "seeking" : ""}`} style={{ transitionDelay: `${i * 0.1}s` }}>
+                  <span className="sparkle">✨</span>
+                  <div className="hobby-icon">{h.icon}</div>
+                  <h3>{h.title}</h3>
+                  <p>{h.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // ===== Social =====
+    function Social() {
+      const { showConfirm, showAlert } = useModal();
+
+      const handleSocialClick = async (e, link) => {
+        e.preventDefault();
+        if (link.name === '抖音') {
+          const confirmResult = await showConfirm(`是否复制抖音号：${link.handle} ？`);
+          if (confirmResult) {
+            try {
+              await navigator.clipboard.writeText(link.handle);
+              await showAlert('✅ 已复制抖音号到剪贴板！');
+            } catch {
+              const textArea = document.createElement('textarea');
+              textArea.value = link.handle;
+              document.body.appendChild(textArea);
+              textArea.select();
+              document.execCommand('copy');
+              document.body.removeChild(textArea);
+              await showAlert('✅ 已复制抖音号到剪贴板！');
+            }
+          }
+        } else {
+          const confirmResult = await showConfirm(`即将跳转到 ${link.name}，是否继续？`);
+          if (confirmResult) {
+            window.open(link.url, '_blank');
+          }
+        }
+      };
+
+      return (
+        <section className="social-section" id="social">
+          <div className="container">
+            <div className="section-header reveal">
+              <span className="section-eyebrow">🔗 Links</span>
+              <h2 className="section-title">找到我呀</h2>
+              <p className="section-subtitle">在这些地方也能找到我，一起来玩吧～ (◍•ᴗ•◍)</p>
+            </div>
+            <div className="social-grid">
+              {socialLinks.map((s, i) => (
+                <div
+                  key={i}
+                  className="social-card reveal"
+                  style={{ transitionDelay: `${i * 0.05}s` }}
+                  onClick={(e) => handleSocialClick(e, s)}
+                >
+                  <img src={s.icon} alt={s.name} />
+                  <span>{s.name}</span>
+                  <span className="handle">{s.handle}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // ===== Fun Section =====
+    function FunSection() {
+      const [clicks, setClicks] = useState(() => {
+        const saved = localStorage.getItem("stukdee_cat_clicks");
+        return saved ? parseInt(saved, 10) : 0;
+      });
+      const [mood, setMood] = useState(moods[0].emoji);
+      const [messages, setMessages] = useState([]);
+
+      useEffect(() => {
+        localStorage.setItem("stukdee_cat_clicks", clicks.toString());
+      }, [clicks]);
+
+      const handleClick = () => {
+        const newCount = clicks + 1;
+        setClicks(newCount);
+
+        const randomMsg = catMessages[Math.floor(Math.random() * catMessages.length)];
+
+        const bubbleWidth = 180;
+        const bubbleHeight = 50;
+        const pad = 20;
+        const x = Math.random() * (window.innerWidth - bubbleWidth - pad * 2) + pad;
+        const y = Math.random() * (window.innerHeight - bubbleHeight - pad * 2) + pad;
+
+        const id = Date.now() + Math.random();
+        setMessages(prev => [...prev, { id, text: randomMsg, x, y }]);
+
+        setTimeout(() => {
+          setMessages(prev => prev.filter(m => m.id !== id));
+        }, 2400);
+      };
+
+      return (
+        <section className="fun-section" id="fun">
+          <div className="container">
+            <div className="section-header reveal">
+              <span className="section-eyebrow">🎮 Playground</span>
+              <h2 className="section-title">互动小屋</h2>
+              <p className="section-subtitle">来和小猫咪互动吧～ 点一点，选个心情 ♡</p>
+            </div>
+            <div className="fun-container reveal">
+              <div className="click-counter-box">
+                <button className="cat-button" onClick={handleClick} aria-label="撸猫">
+                  <span className="cat-emoji">{mood}</span>
+                </button>
+                <div className="click-count">{clicks}</div>
+                <div className="click-label">次撸猫 ♡</div>
+                <div className="mood-row">
+                  {moods.map(m => (
+                    <button key={m.emoji} className={`mood-btn ${mood === m.emoji ? "active" : ""}`} onClick={() => setMood(m.emoji)}>
+                      {m.emoji} {m.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>（数据保存在浏览器里，刷新也不丢～）</p>
+            </div>
+          </div>
+
+          {messages.map(msg => (
+            <div key={msg.id} className="floating-msg" style={{ left: msg.x, top: msg.y }}>
+              {msg.text}
+            </div>
+          ))}
+        </section>
+      );
+    }
+
+    // ===== Footer =====
+    function Footer() {
+      const kaomojis = ["( ´ ▽ ` )ﾉ", "(๑•̀ㅂ•́)و✧", "=^･ω･^=", "(◍•ᴗ•◍)", "( づ ωど)", "＼(^o^)／"];
+      const [idx, setIdx] = useState(0);
+      useEffect(() => {
+        const t = setInterval(() => setIdx(i => (i + 1) % kaomojis.length), 2500);
+        return () => clearInterval(t);
+      }, []);
+      return (
+        <footer>
+          <p>🐱 Stukdee的精神小屋 · 用爱制作 ♡</p>
+          <p>© 2026 Stukdee. All rights reserved.</p>
+          <div className="footer-kaomoji" key={idx} style={{ animation: "slideInUp 0.5s ease" }}>{kaomojis[idx]}</div>
+        </footer>
+      );
+    }
+
+    // ===== Back to Top =====
+    function BackToTop({ visible }) {
+      return (
+        <button className={`back-to-top ${visible ? "visible" : ""}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          ↑
+        </button>
+      );
+    }
+
+    // ===== App =====
+    function App() {
+      const [theme, setTheme] = useState(() => {
+        const saved = localStorage.getItem("stukdee_theme");
+        if (saved) return saved;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      });
+      const [mobileOpen, setMobileOpen] = useState(false);
+      const [showBackTop, setShowBackTop] = useState(false);
+
+      useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("stukdee_theme", theme);
+      }, [theme]);
+
+      const toggleTheme = () => setTheme(t => t === "light" ? "dark" : "light");
+
+      useEffect(() => {
+        const handler = () => setShowBackTop(window.scrollY > 400);
+        window.addEventListener("scroll", handler);
+        return () => window.removeEventListener("scroll", handler);
+      }, []);
+
+      useEffect(() => {
+        const observer = new IntersectionObserver(
+          entries => entries.forEach(e => e.target.classList.toggle("visible", e.isIntersecting)),
+          { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+        );
+        document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+      }, []);
+
+      const isDark = theme === 'dark';
+
+      return (
+        <ModalProvider>
+          <FloatingDecor />
+          <ShootingStars isDark={isDark} />
+          <Navbar theme={theme} toggleTheme={toggleTheme} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+          <Hero />
+          <About />
+          <Hobbies />
+          <Social />
+          <FunSection />
+          <Footer />
+          <BackToTop visible={showBackTop} />
+        </ModalProvider>
+      );
+    }
+
+    // ===== Render =====
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+
+    function announceUpgrade() {
+      window.parent.postMessage({ type: "miaoda:upgrade:available", kind: "interactive-prototype" }, "*");
+    }
+    announceUpgrade();
+    if (document.readyState !== "complete") {
+      window.addEventListener("load", announceUpgrade, { once: true });
+    }
+  </script>
 </body>
 </html>

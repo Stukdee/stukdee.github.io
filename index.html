@@ -1,201 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="oil6">
+<html lang="zh-CN" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stukdee 的个人主页 - 制作小游戏、画画、看电视">
-    <link rel="icon" type="image/svg+xml" href="icon/logo.svg">
-    <title>Stukdee 的个人主页</title>
-
-    <!-- 主题样式 -->
-    <link rel="stylesheet" href="colors/oil6.css">
-    <link rel="stylesheet" href="colors/ammo-8.css">
-    <link rel="stylesheet" href="colors/cc-29.css">
-    <link rel="stylesheet" href="colors/chasm.css">
-    <link rel="stylesheet" href="colors/vinik24.css">
-    <!-- 主样式 -->
-    <link rel="stylesheet" href="main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Stukdee的精神小屋 - 一个爱做小游戏、画画、研究古籍的猫咪爱好者" />
+  <title>Stukdee的精神小屋</title>
+  <link rel="icon" type="image/svg+xml" href="icon/logo.svg" />
+  <link rel="apple-touch-icon" href="icon/head.PNG" />
+  <link rel="stylesheet" href="style.css?v=4" />
 </head>
 <body>
-    <!-- 页面头部 / 导航 -->
-    <header>
-        <nav>
-            <a href="#home" class="logo">Stukdee</a>
-            <ul class="nav-links">
-                <li><a href="#about" data-i18n="nav.about">关于我</a></li>
-                <li><a href="#hobbies" data-i18n="nav.hobbies">爱好</a></li>
-                <li><a href="#social" data-i18n="nav.contact">联系方式</a></li>
-            </ul>
+  <!-- 顶部栏 -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon/logo.svg" alt="logo" class="brand-logo" />
+      <span class="brand-title">Stukdee的精神小屋</span>
+    </div>
+    <button id="themeToggle" class="theme-toggle" aria-label="切换主题">
+      <span class="theme-icon-light">☀️</span>
+      <span class="theme-icon-dark">🌙</span>
+    </button>
+  </header>
 
-            <!-- 主题切换器 -->
-            <div class="theme-switcher">
-                <button class="theme-btn" data-theme="oil6" title="温暖柔粉" aria-label="切换到温暖柔粉主题"></button>
-                <button class="theme-btn" data-theme="ammo-8" title="深绿自然" aria-label="切换到深绿自然主题"></button>
-                <button class="theme-btn" data-theme="cc-29" title="柔和中性" aria-label="切换到柔和中性主题"></button>
-                <button class="theme-btn" data-theme="chasm" title="赛博霓虹" aria-label="切换到赛博霓虹主题"></button>
-                <button class="theme-btn" data-theme="vinik24" title="复古怀旧" aria-label="切换到复古怀旧主题"></button>
-            </div>
+  <!-- 主舞台：3D 卡片轮播 -->
+  <main class="stage">
+    <div id="carousel" class="carousel">
+      <div id="ring" class="ring"></div>
+    </div>
 
-            <!-- 语言切换器（下拉式） -->
-            <div class="lang-switcher" id="lang-switcher">
-                <button class="lang-trigger" id="lang-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="选择语言">
-                    <span class="lang-trigger-text" id="lang-trigger-text">简体中文</span>
-                    <span class="lang-trigger-arrow" aria-hidden="true">▼</span>
-                </button>
-                <div class="lang-dropdown" id="lang-dropdown" role="listbox">
-                    <div class="lang-option" data-lang="zh-CN" role="option" aria-selected="true">
-                        <span class="lang-option-label">简体中文</span>
-                        <span class="lang-option-hello">你好世界</span>
-                    </div>
-                    <div class="lang-option" data-lang="zh-TW" role="option" aria-selected="false">
-                        <span class="lang-option-label">繁體中文</span>
-                        <span class="lang-option-hello">你好世界</span>
-                    </div>
-                    <div class="lang-option" data-lang="ja" role="option" aria-selected="false">
-                        <span class="lang-option-label">日本語</span>
-                        <span class="lang-option-hello">こんにちは世界</span>
-                    </div>
-                    <div class="lang-option" data-lang="en" role="option" aria-selected="false">
-                        <span class="lang-option-label">English</span>
-                        <span class="lang-option-hello">Hello World</span>
-                    </div>
-                    <div class="lang-option" data-lang="ru" role="option" aria-selected="false">
-                        <span class="lang-option-label">Русский</span>
-                        <span class="lang-option-hello">Привет мир</span>
-                    </div>
-                </div>
-            </div>
+    <!-- 滚动提示 -->
+    <div class="scroll-hint" id="scrollHint">
+      <span>滚 / 滑 动 来翻转卡片</span>
+      <div class="hint-arrow">↕</div>
+    </div>
 
-            <!-- 移动端菜单按钮 -->
-            <button class="menu-toggle" aria-label="菜单">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </nav>
-    </header>
+    <!-- 进度指示 -->
+    <div class="progress" id="progress"></div>
+  </main>
 
-    <main>
-        <!-- 首页 / Hero 区域 -->
-        <section id="home">
-            <div class="hero-content">
-                <div class="avatar">
-                    <img src="icon/head.PNG" alt="Stukdee 的头像" data-i18n-alt="alt.avatar">
-                </div>
-                <div class="hero-text">
-                    <h1 data-i18n-html="hero.greeting">你好，我是 <span class="nickname">Stukdee</span> 👋</h1>
-                    <p class="nicknames" data-i18n="hero.nicknames">别称：小克 / 果果 / 果子</p>
-                    <p class="tagline" data-i18n="hero.tagline">热爱生活，热爱创作</p>
-                </div>
-            </div>
-        </section>
+  <footer class="footer">
+    <span>© Stukdee · 用 ✨ 和 🐱 拼装而成</span>
+  </footer>
 
-        <!-- 关于我 -->
-        <section id="about">
-            <div class="section-header">
-                <h2 data-i18n="about.title">关于我</h2>
-            </div>
-            <div class="about-content">
-                <p data-i18n="about.p1">大家好！我是 Stukdee，一个喜欢创造和探索的人。我热衷于将想法变成现实，无论是通过代码、画笔还是其他方式。</p>
-                <p data-i18n="about.p2">欢迎来到我的个人主页，在这里你可以了解我的爱好，找到我的各种平台账号，和我一起交流分享！</p>
-            </div>
-        </section>
-
-        <!-- 爱好 -->
-        <section id="hobbies">
-            <div class="section-header">
-                <h2 data-i18n="hobbies.title">我的爱好</h2>
-            </div>
-            <div class="hobbies-grid">
-                <article class="hobby-card">
-                    <div class="hobby-icon">🎮</div>
-                    <h3 data-i18n="hobby.game.title">制作小游戏</h3>
-                    <p data-i18n="hobby.game.desc">喜欢用代码创造有趣的游戏体验，将想象变成可互动的作品。</p>
-                </article>
-                <article class="hobby-card">
-                    <div class="hobby-icon">🎨</div>
-                    <h3 data-i18n="hobby.art.title">画画</h3>
-                    <p data-i18n="hobby.art.desc">用画笔记录生活和灵感，享受创作过程中的宁静与快乐。</p>
-                </article>
-                <article class="hobby-card">
-                    <div class="hobby-icon">📺</div>
-                    <h3 data-i18n="hobby.tv.title">看电视</h3>
-                    <p data-i18n="hobby.tv.desc">通过影视作品放松身心，从不同的故事中获得启发和感动。</p>
-                </article>
-                <article class="hobby-card">
-                    <div class="hobby-icon">📖</div>
-                    <h3 data-i18n="hobby.books.title">研究古籍</h3>
-                    <p data-i18n="hobby.books.desc">探索古籍中的智慧与文字之美，在历史的长河中寻找启示。</p>
-                </article>
-                <article class="hobby-card">
-                    <div class="hobby-icon">🔍</div>
-                    <h3 data-i18n="hobby.search.title">仍在寻找</h3>
-                    <p data-i18n="hobby.search.desc">生活充满可能，我还在探索更多有趣的事物...</p>
-                </article>
-            </div>
-        </section>
-
-        <!-- 社交账号 / 联系方式 -->
-        <section id="social">
-            <div class="section-header">
-                <h2 data-i18n="social.title">找到我</h2>
-                <p data-i18n="social.desc">欢迎在以下平台关注我，一起交流！</p>
-            </div>
-            <div class="social-links">
-                <a href="https://github.com/Stukdee/" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <img src="icon/github-142-svgrepo-com.svg" alt="Github 图标" data-i18n-alt="alt.github">
-                    <div class="social-info">
-                        <span class="social-name">Github</span>
-                        <span class="social-handle">@Stukdee</span>
-                    </div>
-                </a>
-                <a href="https://space.bilibili.com/3546769633840089" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <img src="icon/bilibili-svgrepo-com.svg" alt="Bilibili 图标" data-i18n-alt="alt.bilibili">
-                    <div class="social-info">
-                        <span class="social-name">Bilibili</span>
-                        <span class="social-handle" data-i18n="social.bilibili">B站空间</span>
-                    </div>
-                </a>
-                <a href="https://dev.to/stukdee" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <img src="icon/dev-to-svgrepo-com.svg" alt="devto 图标" data-i18n-alt="alt.devto">
-                    <div class="social-info">
-                        <span class="social-name">dev.to</span>
-                        <span class="social-handle">@stukdee</span>
-                    </div>
-                </a>
-                <a href="https://www.pixiv.net/users/108207052" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <img src="icon/pixiv-svgrepo-com.svg" alt="Pixiv 图标" data-i18n-alt="alt.pixiv">
-                    <div class="social-info">
-                        <span class="social-name">Pixiv</span>
-                        <span class="social-handle">ID: 108207052</span>
-                    </div>
-                </a>
-                <a href="https://x.com/StukdeeGorye" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <img src="icon/twitter-svgrepo-com.svg" alt="Twitter/X 图标" data-i18n-alt="alt.twitter">
-                    <div class="social-info">
-                        <span class="social-name">Twitter / X</span>
-                        <span class="social-handle">@StukdeeGorye</span>
-                    </div>
-                </a>
-                <a href="https://stukdee.itch.io/" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <img src="icon/itch-io-svgrepo-com.svg" alt="itch.io 图标" data-i18n-alt="alt.itch">
-                    <div class="social-info">
-                        <span class="social-name">itch.io</span>
-                        <span class="social-handle">stukdee.itch.io</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <!-- 页脚 -->
-    <footer>
-        <p data-i18n="footer.rights">&copy; 2026 Stukdee. All rights reserved.</p>
-        <p data-i18n="footer.made">Made with ❤️</p>
-    </footer>
-
-    <!-- 脚本 -->
-    <script src="i18n.js"></script>
-    <script src="main.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>

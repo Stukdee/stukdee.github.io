@@ -1,2 +1,12 @@
 .DS_Store
 /about
+
+# 构建用虚拟环境 / 缓存
+.tools-venv/
+__pycache__/
+.chrome-profile/
+
+# 原始 22MB 字体（Monotype Arial Unicode MS，不入库）
+# 需要重新生成子集时把字体放回 font/ 再跑 build-font-subset.py
+font/*.ttf
+font/*.otf

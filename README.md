@@ -15,7 +15,7 @@
 | `styles.css` | 全部样式：浅色 / 深色、电脑 / 手机适配、打印样式 |
 | `script.js` | 主题切换、年龄计算、页脚年份、颜文字轮播 |
 | `about/index.txt` | 个人资料原稿（改文案从这里开始） |
-| `icon/` | 头像 `head.PNG`、`logo.svg`、各个社交图标 |
+| `icon/` | 头像 `head.PNG`、`logo.svg`、网页图标 `favicon.svg`、各个社交图标 |
 | `font/arial-unicode-subset.woff2` | 只含本站用字的网页字体（约 91 KB） |
 
 ### 手机适配
@@ -44,7 +44,17 @@ python3 -m venv .tools-venv
 
 # 3. 新增/替换图标后，重新内联 SVG
 python3 build-inline-icons.py
+
+# 4. logo.svg 有改动时，重新生成网页图标
+python3 build-favicon.py
 ```
+
+### 网页图标
+
+浏览器标签页上的图标由 `icon/favicon.svg` 提供，它**由 `icon/logo.svg` 生成**
+（`build-favicon.py`）：裁掉 A4 空白、补一层浅色圆形底、把"毫米级"的线宽加粗到
+小尺寸能看清的程度。所以改 logo 之后记得重跑一次 `build-favicon.py`。
+`icon/head.PNG` 作为 `rel="alternate icon"` 保留，给不支持 SVG 图标的极老浏览器兜底。
 
 ## 个人资料
 

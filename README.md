@@ -15,7 +15,7 @@
 | `styles.css` | 全部样式：浅色 / 深色、电脑 / 手机适配、打印样式 |
 | `script.js` | 主题切换、年龄计算、页脚年份、颜文字轮播 |
 | `about/index.txt` | 个人资料原稿（改文案从这里开始） |
-| `icon/` | 头像 `head.PNG`、`logo.svg`、网页图标 `favicon.svg`、各个社交图标 |
+| `icon/` | 头像 `head.PNG`、`logo.svg`、网页图标 `favicon.svg`、分享大图 `og-cover.png`、各个社交图标 |
 | `font/arial-unicode-subset.woff2` | 只含本站用字的网页字体（约 91 KB） |
 
 ### 手机适配
@@ -47,6 +47,9 @@ python3 build-inline-icons.py
 
 # 4. logo.svg 有改动时，重新生成网页图标
 python3 build-favicon.py
+
+# 5. 改了首页文案 / 头像 / logo 后，重新生成分享预览大图
+python3 build-og-image.py
 ```
 
 ### 网页图标
@@ -55,6 +58,29 @@ python3 build-favicon.py
 （`build-favicon.py`）：裁掉 A4 空白、补一层浅色圆形底、把"毫米级"的线宽加粗到
 小尺寸能看清的程度。所以改 logo 之后记得重跑一次 `build-favicon.py`。
 `icon/head.PNG` 作为 `rel="alternate icon"` 保留，给不支持 SVG 图标的极老浏览器兜底。
+
+### 分享到 X（推特）
+
+链接发到 X 上会显示成**大图卡片**，靠的就是 `index.html` 里这几行：
+
+```html
+<meta property="og:image" content="https://stukdee.is-a.dev/icon/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+```
+
+三个要点：
+
+1. **图片必须是绝对 URL**（`https://…`），相对路径 X 抓不到；
+2. **横图 1200×630** 才会显示成大图。用方图 + `summary` 只会缩成角落里的小方图；
+3. **X 会缓存旧预览**，换图后不会立刻更新，等几分钟到几小时，或者用
+   [Card Validator](https://cards-dev.twitter.com/validator) / 在链接后加 `?v=2` 强制重抓。
+
+`icon/og-cover.png` 由 `build-og-image.py` 生成：它把字体、logo、头像全部内联进
+`.og-template.html`（模板在脚本里的同名文件），再用无头 Chrome 渲染成 1200×630。
+改版式就改模板，改完重跑脚本。想快速自查效果，把链接发到 Telegram 的「Saved Messages」
+或 Discord，它们抓取快、不缓存。
 
 ## 个人资料
 

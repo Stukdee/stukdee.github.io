@@ -6,6 +6,10 @@
 __pycache__/
 .chrome-profile/
 
+# 分享图渲染的中间文件（PNG 成品会入库）
+.og-render.html
+.og-template.html
+
 # 原始 22MB 字体（Monotype Arial Unicode MS，不入库）
 # 需要重新生成子集时把字体放回 font/ 再跑 build-font-subset.py
 font/*.ttf

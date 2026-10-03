@@ -36,7 +36,8 @@
   --glow: rgba(255, 107, 138, 0.22);
   --shadow: 0 4px 24px rgba(255, 107, 138, 0.12);
   --shadow-hover: 0 10px 30px rgba(255, 107, 138, 0.22);
-  --ring-w: clamp(15px, 4.4vw, 34px);
+  --ring: clamp(212px, 27vw, 340px);   /* 圆环外径：宽高显式相等，保证正圆 */
+  --ring-w: clamp(15px, 4.4vw, 34px);   /* 圆环粗细 */
   --radius: 16px;
 }
 
@@ -187,21 +188,30 @@ a:hover { color: var(--accent); }
   padding-left: clamp(0px, 2vw, 26px);
 }
 
+/* 圆环的宽高由 --ring 显式给成相等值，任何浏览器都是正圆。
+   这里刻意不用 aspect-ratio：部分旧版 iOS Safari / App 内置浏览器不支持，
+   那样圆环只剩宽度、高度被内容撑开，头像就会显示成椭圆。 */
 .avatar-ring {
   position: relative;
-  width: min(100%, 340px);
-  aspect-ratio: 1;
-  padding: var(--ring-w);
+  flex: 0 0 auto;
+  width: var(--ring);
+  height: var(--ring);
   background: var(--pink);
   border-radius: 50%;
   box-shadow: 0 12px 34px -24px rgba(61, 31, 43, 0.75);
 }
 
 .avatar {
+  /* 尺寸必须写死成 calc()：绝对定位的 <img> 如果 width/height 是 auto，
+     浏览器会按图片固有尺寸（768px）撑开再被裁到 100%，内缩就失效了。 */
+  position: absolute;
+  top: var(--ring-w);
+  left: var(--ring-w);
+  width: calc(var(--ring) - var(--ring-w) * 2);
+  height: calc(var(--ring) - var(--ring-w) * 2);
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  overflow: hidden;            /* 兜底：任何情况下都不会溢出成椭圆 */
+  object-fit: cover;           /* 头像是正方形，cover / contain 效果一致 */
   object-position: center;
   background: #fff;
   border: 1px solid rgba(61, 31, 43, 0.12);
@@ -449,7 +459,7 @@ a:hover { color: var(--accent); }
     align-items: start;
   }
   .avatar-col { padding-left: 0; }
-  .avatar-ring { width: min(60vw, 300px); }
+  .avatar-ring { --ring: min(60vw, 300px); }
 }
 
 @media (max-width: 620px) {
@@ -459,7 +469,7 @@ a:hover { color: var(--accent); }
     padding: 16px;
     border-radius: var(--radius);
   }
-  .avatar-ring { width: min(70vw, 250px); }
+  .avatar-ring { --ring: min(70vw, 250px); }
   .brand-text small { display: none; }
   .card { padding: 14px 16px; }
   .card--birthday,

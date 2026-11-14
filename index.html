@@ -37,21 +37,56 @@
       var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       var fromUrl = (location.search.match(/[?&]theme=(dark|light)\b/) || [])[1];
       document.documentElement.setAttribute("data-theme", fromUrl || saved || (dark ? "dark" : "light"));
+      /* 动效开关也提前读一次，避免重新打开页面时先动一下再停 */
+      var savedMotion = localStorage.getItem("stukdee_motion");
+      if (savedMotion) document.documentElement.setAttribute("data-motion", savedMotion);
     } catch (e) {}
   })();
 </script>
 </head>
 <body>
 <a class="skip-link" href="#profile">跳到个人资料</a>
+<p class="sr-only" id="live" aria-live="polite"></p>
+
+<!-- 背景装饰：会飘的光斑、星星和小 emoji，纯装饰，不挡点击 -->
+<div class="bg-deco" aria-hidden="true">
+  <span class="blob blob--1"></span>
+  <span class="blob blob--2"></span>
+  <span class="blob blob--3"></span>
+  <span class="bg-stars"></span>
+  <div class="bg-emoji">
+    <span style="--x:3%;--y:16%;--fs:20px;--d:13s;--dl:-2s">🐾</span>
+    <span style="--x:6%;--y:46%;--fs:17px;--d:15s;--dl:-7s">✦</span>
+    <span style="--x:93%;--y:17%;--fs:22px;--d:12s;--dl:-4s">🌸</span>
+    <span style="--x:94%;--y:56%;--fs:20px;--d:16s;--dl:-9s">🍫</span>
+    <span style="--x:2%;--y:76%;--fs:22px;--d:14s;--dl:-5s">🥛</span>
+    <span style="--x:92%;--y:78%;--fs:18px;--d:17s;--dl:-1s">⭐</span>
+    <span style="--x:2%;--y:32%;--fs:16px;--d:18s;--dl:-11s">🐱</span>
+    <span style="--x:93%;--y:38%;--fs:16px;--d:15s;--dl:-6s">🎀</span>
+    <span style="--x:4%;--y:58%;--fs:15px;--d:19s;--dl:-3s">🍓</span>
+    <span style="--x:94%;--y:66%;--fs:15px;--d:16s;--dl:-8s">✨</span>
+    <span style="--x:8%;--y:24%;--fs:17px;--d:13s;--dl:-6s">❤️</span>
+    <span style="--x:91%;--y:64%;--fs:16px;--d:15s;--dl:-2s">🐾</span>
+    <span style="--x:12%;--y:48%;--fs:15px;--d:17s;--dl:-9s">🎨</span>
+    <span style="--x:86%;--y:28%;--fs:15px;--d:14s;--dl:-4s">🎮</span>
+    <span style="--x:6%;--y:70%;--fs:15px;--d:18s;--dl:-7s">🍰</span>
+    <span style="--x:95%;--y:88%;--fs:16px;--d:16s;--dl:-11s">🌙</span>
+  </div>
+</div>
 
 <header class="site-header">
   <a class="brand" href="./">
     <svg class="logo" viewBox="-30.83 9.85 254.32 247.54" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" data-icon="logo.svg" width="64" height="72" decoding="async"><defs /> <g > <ellipse style="fill:#ffffff;stroke-width:1.152;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1" cx="96.33223" cy="133.61494" rx="115.59867" ry="112.20778" /> <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="M 78.648429,99.604908 27.366695,66.32109 l -0.246546,57.9385 z" /> <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 108.97368,95.660159 59.66433,-41.666409 -3.45165,60.65051 z" /> </g> <g > <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 87.277568,98.372173 c 0.886531,-9.180879 13.379192,-5.216318 12.32734,0.246547 -1.051851,5.46286 -13.213871,8.93433 -12.32734,-0.246547 z" /> </g> <g > <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 46.701889,115.52572 c 4.695893,-12.99225 3.318375,-25.984506 2.106851,-38.976759 9.334811,10.446418 19.410537,20.744654 21.419664,32.656209" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 81.368179,108.39607 c 9.86281,-3.07988 19.725621,-3.9347 29.588431,-1.70703" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 117.78471,104.98202 c 0.16206,-15.593706 8.79615,-28.363403 15.36322,-41.822106 0.66757,15.539046 0.1947,32.091807 7.39711,41.822106" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 38.977065,123.47479 c -13.660679,10.33698 -7.66518,33.76115 5.690082,34.7095" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 148.51115,110.95661 c 12.67169,10.14731 10.17977,27.97624 -3.69856,38.12355" /> <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 36.416527,168.14194 c 42.63835,-4.62771 73.440183,-9.12304 122.336773,-11.66467 6.43119,4.6469 10.91134,16.1219 0.85351,24.75186 -39.3975,10.74872 -81.060687,14.13395 -123.474787,15.07872 -5.297311,-9.38864 -4.262111,-18.77727 0.284504,-28.16591 z" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 56.597264,142.27381 8.782333,-18.54048 10.148474,12.29526" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 105.38801,136.22376 8.78233,-20.49211 9.95331,16.58885" /> </g></svg>
     <span class="brand-text">Stukdee<small>.is-a.dev</small></span>
   </a>
-  <button class="theme-toggle" type="button" id="theme-toggle" aria-label="切换深色 / 浅色主题" title="切换主题">
-    <span class="theme-icon" aria-hidden="true">🌙</span>
-  </button>
+  <div class="header-actions">
+    <button class="round-btn theme-toggle" type="button" id="theme-toggle" aria-label="切换深色 / 浅色主题" title="切换主题">
+      <span class="theme-icon" aria-hidden="true">🌙</span>
+    </button>
+    <button class="round-btn motion-toggle" type="button" id="motion-toggle" aria-label="页面动效" aria-pressed="true" title="暂停动效">
+      <span class="motion-icon" aria-hidden="true">✨</span>
+    </button>
+  </div>
 </header>
 
 <main class="wrap">
@@ -59,21 +94,45 @@
   <section class="profile" id="profile" aria-label="个人资料">
 
     <div class="avatar-col">
-      <div class="avatar-ring">
-        <img class="avatar" src="icon/head.PNG" alt="Stukdee 的头像" width="768" height="768" fetchpriority="high" decoding="async">
-      </div>
+      <button class="avatar-ring" type="button" id="avatar-ring" aria-label="摸摸头像，会有小爱心飘出来">
+        <span class="ring-halo" aria-hidden="true"></span>
+        <span class="ring-dash" aria-hidden="true"></span>
+        <img class="avatar" src="icon/head.PNG" alt="Stukdee 的头像" width="768" height="768" fetchpriority="high" decoding="async" draggable="false">
+        <!-- 绕着粉色圆环转圈的小贴纸 -->
+        <span class="orbit" aria-hidden="true">
+          <span class="orbit-item" style="--a:0deg"><span>🐱</span></span>
+          <span class="orbit-item" style="--a:90deg"><span>🎨</span></span>
+          <span class="orbit-item" style="--a:180deg"><span>🍫</span></span>
+          <span class="orbit-item" style="--a:270deg"><span>🥛</span></span>
+        </span>
+        <span class="sticker sticker--1" aria-hidden="true">🐱 cat person</span>
+        <span class="sticker sticker--2" aria-hidden="true">🎨 making games</span>
+      </button>
+      <span class="avatar-hint" id="avatar-hint" aria-hidden="true">戳戳我 ♡</span>
+      <button class="now-card" id="now-card" type="button"
+              aria-label="果果的状态：正在做小游戏…，点一下换一个"
+              title="点我换个状态 ♡">
+        <span class="now-dot" aria-hidden="true"></span>
+        <span class="now-emoji" id="now-emoji" aria-hidden="true">🎮</span>
+        <span class="now-text" id="now-text">正在做小游戏…</span>
+      </button>
+      <svg class="avatar-doodle" viewBox="0 0 160 96" aria-hidden="true" focusable="false">
+        <path class="doodle-line" d="M7 64 C 28 22, 47 86, 71 52 S 112 20, 150 44"></path>
+        <path class="doodle-star" d="M33 18 l3.4 7.2 7.6 1.6 -5.6 5.4 1.4 7.8 -6.8 -3.8 -6.8 3.8 1.4 -7.8 -5.6 -5.4 7.6 -1.6 z"></path>
+        <path class="doodle-heart" d="M128 70 c-4-5-12-2-9 4 2 3 6 6 9 9 3-3 7-6 9-9 3-6-5-9-9-4z"></path>
+      </svg>
     </div>
 
     <div class="info-col">
 
       <!-- ① 昵称 + 别称 -->
       <article class="card card--hero">
-        <p class="card-kicker">Nice to meet you!</p>
+        <p class="card-kicker">Nice to meet you! <span class="wave-hand" aria-hidden="true">👋</span></p>
         <h1 class="card-title">Stukdee</h1>
         <p class="card-badges">
-          <span class="badge">小克</span>
-          <span class="badge">果果</span>
-          <span class="badge">果子</span>
+          <span class="badge" style="--i:0">小克</span>
+          <span class="badge" style="--i:1">果果</span>
+          <span class="badge" style="--i:2">果子</span>
         </p>
       </article>
 
@@ -85,9 +144,9 @@
           <p class="card-value">
             <time datetime="2010-09-06">2010 年 9 月 6 日</time>
             <span class="dot" aria-hidden="true">·</span>
-            <span id="age" data-birthday="2010-09-06">15 岁</span>
-            <span class="dot" aria-hidden="true">·</span>
-            <span>处女座</span>
+            <span id="age" data-birthday="2010-09-06">16 岁</span>
+            <span class="dot dot--zodiac" aria-hidden="true" style="animation-delay:-0.8s">·</span>
+            <span class="zodiac">处女座</span>
           </p>
         </div>
       </article>
@@ -98,11 +157,11 @@
         <div class="card-body">
           <p class="card-label">爱好</p>
           <ul class="chips">
-            <li class="chip">制作小游戏</li>
-            <li class="chip">画画</li>
-            <li class="chip">看电视</li>
-            <li class="chip">研究古籍</li>
-            <li class="chip chip--soon">仍在寻找…</li>
+            <li class="chip" role="button" tabindex="0" style="--i:0" data-emoji="🎮" data-say="正在做小游戏…"><span class="chip-emoji" aria-hidden="true">🎮</span>制作小游戏</li>
+            <li class="chip" role="button" tabindex="0" style="--i:1" data-emoji="🎨" data-say="画画中，勿扰～"><span class="chip-emoji" aria-hidden="true">🎨</span>画画</li>
+            <li class="chip" role="button" tabindex="0" style="--i:2" data-emoji="📺" data-say="电视时间！"><span class="chip-emoji" aria-hidden="true">📺</span>看电视</li>
+            <li class="chip" role="button" tabindex="0" style="--i:3" data-emoji="📜" data-say="研究古籍中…"><span class="chip-emoji" aria-hidden="true">📜</span>研究古籍</li>
+            <li class="chip chip--soon" role="button" tabindex="0" style="--i:4" data-emoji="✨"><span class="chip-emoji" aria-hidden="true">✨</span>仍在寻找…</li>
           </ul>
         </div>
       </article>
@@ -114,12 +173,12 @@
           关于我
         </h2>
 
-        <p class="bio">我是 <strong>Stukdee</strong>，一个喜欢做小游戏和画画的家伙 🎨</p>
+        <p class="bio">我是 <strong>Stukdee</strong>，一个喜欢做小游戏和画画的家伙 <span class="wobble" aria-hidden="true">🎨</span></p>
         <p class="bio">
-          是特仑苏 🥛 和明治巧克力 🍫（特浓牛奶味最好吃）的忠实粉丝，
-          也是坚定的猫派 —— <em>猫咪快点统治世界吧！！！</em>
+          是特仑苏 <span class="wobble" aria-hidden="true">🥛</span> 和明治巧克力 <span class="wobble" aria-hidden="true">🍫</span>（特浓牛奶味最好吃）的忠实粉丝，
+          也是坚定的猫派 —— <em><span class="hl">猫咪快点统治世界吧！！！</span></em>
         </p>
-        <p class="bio bio--friends">一起交朋友呀！</p>
+        <p class="bio bio--friends">一起交朋友呀！<span class="hearts" aria-hidden="true"><span class="heart" style="--i:0">❤️</span><span class="heart" style="--i:1">❤️</span><span class="heart" style="--i:2">❤️</span><span class="heart" style="--i:3">❤️</span><span class="heart" style="--i:4">❤️</span></span><span class="friends-face" aria-hidden="true">☆˶&gt; x &lt;˶.⁺</span></p>
 
         <hr class="rule">
 
@@ -139,7 +198,7 @@
           <li><a href="https://huggingface.co/Stukdee" target="_blank" rel="me noopener"><img src="icon/huggingface.svg" alt="" width="20" height="20"><span>Hugging Face</span></a></li>
         </ul>
 
-        <p class="kaomoji" id="kaomoji" aria-hidden="true">(๑•̀ㅂ•́)و✧</p>
+        <button class="kaomoji" id="kaomoji" type="button" aria-label="换一个可爱颜文字" title="点我换表情 ♡">(๑•̀ㅂ•́)و✧</button>
       </article>
 
     </div>
@@ -148,7 +207,7 @@
 
 <footer class="site-footer">
   <svg class="logo logo--sm" viewBox="-30.83 9.85 254.32 247.54" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" data-icon="logo.svg" width="32" height="36" loading="lazy" decoding="async"><defs /> <g > <ellipse style="fill:#ffffff;stroke-width:1.152;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1" cx="96.33223" cy="133.61494" rx="115.59867" ry="112.20778" /> <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="M 78.648429,99.604908 27.366695,66.32109 l -0.246546,57.9385 z" /> <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 108.97368,95.660159 59.66433,-41.666409 -3.45165,60.65051 z" /> </g> <g > <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 87.277568,98.372173 c 0.886531,-9.180879 13.379192,-5.216318 12.32734,0.246547 -1.051851,5.46286 -13.213871,8.93433 -12.32734,-0.246547 z" /> </g> <g > <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 46.701889,115.52572 c 4.695893,-12.99225 3.318375,-25.984506 2.106851,-38.976759 9.334811,10.446418 19.410537,20.744654 21.419664,32.656209" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 81.368179,108.39607 c 9.86281,-3.07988 19.725621,-3.9347 29.588431,-1.70703" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 117.78471,104.98202 c 0.16206,-15.593706 8.79615,-28.363403 15.36322,-41.822106 0.66757,15.539046 0.1947,32.091807 7.39711,41.822106" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 38.977065,123.47479 c -13.660679,10.33698 -7.66518,33.76115 5.690082,34.7095" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 148.51115,110.95661 c 12.67169,10.14731 10.17977,27.97624 -3.69856,38.12355" /> <path style="fill:#ff3e3e;fill-opacity:1;stroke:#ff3e3e;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 36.416527,168.14194 c 42.63835,-4.62771 73.440183,-9.12304 122.336773,-11.66467 6.43119,4.6469 10.91134,16.1219 0.85351,24.75186 -39.3975,10.74872 -81.060687,14.13395 -123.474787,15.07872 -5.297311,-9.38864 -4.262111,-18.77727 0.284504,-28.16591 z" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 56.597264,142.27381 8.782333,-18.54048 10.148474,12.29526" /> <path style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" d="m 105.38801,136.22376 8.78233,-20.49211 9.95331,16.58885" /> </g></svg>
-  <p>🐱 Stukdee 的精神小屋 · 用爱制作 ♡</p>
+  <p>🐱 Stukdee 的精神小屋 · 用爱制作 <span class="footer-heart">♡</span></p>
   <p class="copyright">© <span id="year">2026</span> Stukdee. All rights reserved.</p>
 </footer>
 

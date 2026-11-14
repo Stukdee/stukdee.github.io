@@ -54,6 +54,9 @@ def page_chars() -> set[str]:
     # CSS 里 content: "aka " 之类也补上
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     text += " " + "".join(re.findall(r'content:\s*"([^"]*)"', css))
+    # aria-label / title / alt / meta content / data-say 里的字也可能显示在页面上
+    text += " " + " ".join(re.findall(
+        r'(?:alt|title|aria-label|content|data-say)="([^"]*)"', html))
     # script.js 里的颜文字 / 动态文案也算上
     if SCRIPT.exists():
         text += " " + SCRIPT.read_text(encoding="utf-8")

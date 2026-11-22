@@ -371,6 +371,13 @@ a:hover { color: var(--accent); }
   -webkit-touch-callout: none;
 }
 
+/* 连戳头像时别触发手机浏览器的「双击缩放」；双指捏合缩放仍然保留 */
+a,
+button,
+[role="button"] {
+  touch-action: manipulation;
+}
+
 .theme-icon,
 .motion-icon { display: inline-block; }
 .theme-icon.spin-once { animation: spin 0.6s var(--ease-spring); }

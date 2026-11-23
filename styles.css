@@ -1197,11 +1197,27 @@ html[data-motion="off"] .now-text::after { display: none; }
   opacity: 0.9;
   animation: bob 4.2s ease-in-out infinite;
 }
+/* 页脚的小爱心：现在是一颗可以点的小按钮 */
 .footer-heart {
   display: inline-block;
+  margin: 0;
+  padding: 0 4px;
+  border: 0;
+  background: none;
   color: var(--accent);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
   animation: heart-beat 1.8s ease-in-out infinite;
+  transition: color 0.2s ease;
 }
+.footer-heart:hover { color: var(--accent-ink); }
+.footer-heart:focus-visible { outline-offset: 3px; }
 
 /* ==========================================================================
    点击粒子 / 鼠标星尘
@@ -1553,6 +1569,110 @@ html[data-motion="off"] .now-text::after { display: none; }
 ::view-transition-new(root) { animation: theme-wipe 0.6s var(--ease-out); }
 html[data-motion="off"]::view-transition-old(root),
 html[data-motion="off"]::view-transition-new(root) { animation: none; }
+
+/* ==========================================================================
+   调皮的小机关：吐槽气泡、躲闪 emoji、突然的波浪与逆行
+   ========================================================================== */
+
+/* 页面顶部的悄悄话气泡（发呆调侃 / 随机恶作剧） */
+.toasts {
+  position: fixed;
+  left: 50%;
+  top: clamp(84px, 11vw, 112px);
+  z-index: 9996;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  translate: -50% 0;
+}
+.toast {
+  max-width: min(86vw, 430px);
+  padding: 8px 18px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--ink-soft);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  rotate: var(--toast-r, 0deg);
+  animation: toast-in 0.45s var(--ease-spring) both,
+             toast-out 0.4s ease 2.45s forwards;
+}
+@keyframes toast-in {
+  from { opacity: 0; translate: 0 14px; scale: 0.9; }
+  to   { opacity: 1; translate: 0 0; scale: 1; }
+}
+@keyframes toast-out {
+  to { opacity: 0; translate: 0 -8px; scale: 0.94; }
+}
+html[data-motion="off"] .toasts { display: none; }
+@media (max-width: 620px) {
+  .toasts { top: auto; bottom: 66px; }
+}
+
+/* 头像被戳时冒出的嫌弃小气泡 */
+.avatar-kao {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  z-index: 5;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--accent-ink);
+  background: var(--card);
+  border: 1px solid var(--pink-mid);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+  translate: -50% 0;
+  animation: kao-pop 0.5s var(--ease-spring) both,
+             kao-out 0.3s ease 0.95s forwards;
+}
+@keyframes kao-pop {
+  from { opacity: 0; scale: 0.55; }
+  60%  { scale: 1.12; }
+  to   { opacity: 1; scale: 1; }
+}
+@keyframes kao-out {
+  to { opacity: 0; scale: 0.88; }
+}
+
+/* 「仍在寻找…」的 emoji 会躲你的鼠标 */
+.chip.chip-hop .chip-emoji {
+  animation: chip-hop 0.5s var(--ease-spring);
+}
+@keyframes chip-hop {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  35%      { translate: var(--hop-x, 8px) var(--hop-y, -4px); rotate: 16deg; }
+  70%      { translate: calc(-1 * var(--hop-x, 8px)) 2px; rotate: -14deg; }
+}
+
+/* 名字偶尔来一波波浪（随机恶作剧） */
+.card-title.wave-once .letter {
+  animation: letter-jump 0.7s var(--ease-out);
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* 轨道贴纸偶尔逆行 */
+.avatar-ring.orbit-reverse .orbit-item {
+  animation-direction: reverse;
+}
+
+/* 猫猫伙伴转圈圈 */
+.pet.pet-flip .pet-body {
+  animation: pet-flip 0.8s var(--ease-out);
+}
+@keyframes pet-flip {
+  from { transform: rotate(0deg) scale(1); }
+  to   { transform: rotate(360deg) scale(1.06); }
+}
 
 /* ==========================================================================
    减少动态效果 / 手动暂停

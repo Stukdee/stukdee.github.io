@@ -44,6 +44,7 @@
   }
 
   var live = document.getElementById("live");
+  var ORIGINAL_TITLE = document.title;
 
   /* ======================================================================
      1. 粒子：点击爆开的小爱心 + 鼠标划过的星尘
@@ -169,6 +170,7 @@
     startStatus();
     startAmbient();
     startCatWalk();
+    startMischief();
   }
 
   function applyMotion() {
@@ -181,6 +183,7 @@
       stopAmbient();
       stopCatRain();
       stopCatWalk();
+      stopMischief();
       hidePet();
       root.style.setProperty("--par-x", "0");
       root.style.setProperty("--par-y", "0");
@@ -472,7 +475,10 @@
     { e: "🍫", t: "明治特浓牛奶味最好吃" },
     { e: "🐾", t: "猫咪巡逻中…" },
     { e: "💖", t: "一起交朋友呀！" },
-    { e: "✨", t: "仍在寻找新爱好…" }
+    { e: "✨", t: "仍在寻找新爱好…" },
+    { e: "😼", t: "刚把你当成鱼了" },
+    { e: "💤", t: "正在发呆…（勿扰）" },
+    { e: "🤫", t: "嘘——我在假装看书" }
   ];
   var statusIndex = 0;
   var statusTypeTimer = null;
@@ -988,7 +994,13 @@
      ====================================================================== */
 
   var chipNodes = document.querySelectorAll(".chip");
+  var CHIP_DODGE = ["也许… 学做甜点？", "睡觉算爱好吗？", "下次爱好：数星星！",
+                    "正在寻找：不存在的爱好", "要不开一家猫咖？"];
+  var CHIP_TOASTS = ["抓到了！", "就知道你想点我！", "这个爱好，我看行！", "下个爱好会自己躲开"];
+
   Array.prototype.forEach.call(chipNodes, function (chip) {
+    var lastHop = 0;
+
     chip.addEventListener("keydown", function (e) {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
@@ -996,13 +1008,29 @@
       }
     });
 
+    // 调皮：emoji 偶尔躲一下鼠标（不影响点击）
+    chip.addEventListener("pointerenter", function () {
+      if (!fineMQ.matches || motionOff) return;
+      var now = Date.now();
+      if (now - lastHop < 900) return;
+      if (Math.random() > 0.45) return;
+      lastHop = now;
+      var hopX = (Math.random() < 0.5 ? -1 : 1) * rand(5, 12);
+      var hopY = rand(-8, 6);
+      chip.style.setProperty("--hop-x", hopX.toFixed(1) + "px");
+      chip.style.setProperty("--hop-y", hopY.toFixed(1) + "px");
+      chip.classList.remove("chip-hop");
+      void chip.offsetWidth;
+      chip.classList.add("chip-hop");
+      window.setTimeout(function () { chip.classList.remove("chip-hop"); }, 520);
+    });
+
     chip.addEventListener("click", function (e) {
       var emoji = chip.getAttribute("data-emoji") || "✨";
       var text = chip.getAttribute("data-say");
-      if (!text) {
-        text = pick(["也许… 学做甜点？", "要不要试试摄影？", "养一盆花？", "学一门乐器？", "去画一只猫？"]);
-      }
+      if (!text) text = pick(CHIP_DODGE);
       sayStatus(emoji, text);
+      if (Math.random() < 0.3) sayToast(pick(CHIP_TOASTS));
       if (motionOff) return;
       var rect = chip.getBoundingClientRect();
       burst(e.clientX || (rect.left + rect.width / 2),
@@ -1021,6 +1049,9 @@
   if (birthdayCard) {
     birthdayCard.addEventListener("click", function (e) {
       sayStatus("🎂", "9 月 6 日，蛋糕日！");
+      if (Math.random() < 0.5) {
+        sayToast(pick(["蛋糕日快乐！", "9 月 6 日，记得吃蛋糕！", "生日那天会有猫猫来唱生日歌！"]));
+      }
       if (motionOff) return;
       var rect = birthdayCard.getBoundingClientRect();
       burst(e.clientX || (rect.left + rect.width / 2),
@@ -1031,6 +1062,237 @@
         spreadMax: 92,
         sizeMin: 13,
         sizeMax: 22
+      });
+    });
+  }
+
+  /* ======================================================================
+     10.8 调皮小机关：吐槽气泡、发呆调侃、随机恶作剧
+     ====================================================================== */
+
+  var POKE_LINES = [
+    "喂——还在吗？",
+    "盯着我看这么久，是想收养我吗？",
+    "悄悄告诉你：这里藏着一场猫猫雨",
+    "发呆的第 N 分钟…",
+    "戳一下头像会有惊喜（真的）",
+    "别走嘛，喵～"
+  ];
+  var FUNNY_LINES = [
+    "我刚刚假装没看见你",
+    "页面上藏着 17 只猫，找找看？",
+    "这个网站是猫咪做的，信吗？",
+    "特浓牛奶味最好吃（大声）",
+    "鼠标好快！追不上啦！",
+    "果果刚刚打了个哈欠",
+    "今天也要喝特仑苏哦",
+    "你猜猫猫雨怎么触发？连戳头像！"
+  ];
+  var AVATAR_TOASTS = [
+    "戳我干嘛！",
+    "好痒！喵！",
+    "再戳就下雨哦",
+    "我是猫，不是按钮！",
+    "摸一次收一条小鱼干"
+  ];
+  var KAO_FACES = ["(>_<)", "(*≧ω≦)", "喵呜！", "哼！", "唔…", "(=^･ω･^=)"];
+
+  var toastWrap = null;
+
+  function ensureToasts() {
+    if (toastWrap) return toastWrap;
+    toastWrap = document.createElement("div");
+    toastWrap.className = "toasts";
+    toastWrap.setAttribute("aria-hidden", "true");
+    document.body.appendChild(toastWrap);
+    return toastWrap;
+  }
+
+  function clearToasts() {
+    if (toastWrap) toastWrap.textContent = "";
+  }
+
+  function sayToast(text) {
+    if (motionOff) return;
+    var wrap = ensureToasts();
+    while (wrap.children.length >= 2 && wrap.firstChild) {
+      wrap.removeChild(wrap.firstChild);
+    }
+    var el = document.createElement("div");
+    el.className = "toast";
+    el.textContent = text;
+    el.style.setProperty("--toast-r",
+      (Math.random() < 0.5 ? -1 : 1) * rand(0.6, 1.6).toFixed(1) + "deg");
+    wrap.appendChild(el);
+    window.setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 3100);
+  }
+
+  /* 随机恶作剧：名字波浪、轨道逆行、头像闪星星、猫猫转圈、悄悄话 */
+  var mischiefTimer = null;
+  var mischiefFirst = true;
+
+  function waveTitleOnce() {
+    var title = document.querySelector(".card-title");
+    if (!title) return;
+    title.classList.remove("wave-once");
+    void title.offsetWidth;
+    title.classList.add("wave-once");
+    window.setTimeout(function () { title.classList.remove("wave-once"); }, 1400);
+  }
+
+  function orbitReverseOnce() {
+    var ring = document.getElementById("avatar-ring");
+    if (!ring) return;
+    ring.classList.add("orbit-reverse");
+    window.setTimeout(function () { ring.classList.remove("orbit-reverse"); }, 6000);
+  }
+
+  function sparkleAtAvatar() {
+    for (var i = 0; i < 4; i++) ambientHeart();
+  }
+
+  function petFlipOnce() {
+    if (!pet || !pet.classList.contains("is-on")) return false;
+    pet.classList.remove("pet-flip");
+    void pet.offsetWidth;
+    pet.classList.add("pet-flip");
+    window.setTimeout(function () { pet.classList.remove("pet-flip"); }, 900);
+    var say = document.createElement("span");
+    say.className = "pet-say";
+    say.textContent = pick(["转圈圈！", "看我！", "呼啦——"]);
+    pet.appendChild(say);
+    window.setTimeout(function () {
+      if (say.parentNode) say.parentNode.removeChild(say);
+    }, 950);
+    return true;
+  }
+
+  function runMischief() {
+    mischiefTimer = null;
+    if (motionOff || document.hidden) {
+      mischiefTimer = window.setTimeout(runMischief, rand(20000, 34000));
+      return;
+    }
+    if (mischiefFirst) {
+      mischiefFirst = false;
+      sayToast(pick(["喂——看到我了吗？", "这个页面是活的，信不信由你！"]));
+    } else {
+      var roll = Math.random();
+      if (roll < 0.25) waveTitleOnce();
+      else if (roll < 0.45) orbitReverseOnce();
+      else if (roll < 0.62) sparkleAtAvatar();
+      else if (roll < 0.74) {
+        if (!petFlipOnce()) sayToast(pick(FUNNY_LINES));
+      } else {
+        sayToast(pick(FUNNY_LINES));
+      }
+    }
+    mischiefTimer = window.setTimeout(runMischief, rand(20000, 34000));
+  }
+
+  /* 发呆太久会被调侃 */
+  var idleTimer = null;
+  var lastActivity = Date.now();
+  var lastPokeAt = 0;
+
+  function bumpActivity() {
+    lastActivity = Date.now();
+  }
+
+  function pokeIfIdle() {
+    if (motionOff || document.hidden) return;
+    var now = Date.now();
+    if (now - lastActivity < 18000) return;
+    if (now - lastPokeAt < 32000) return;
+    lastPokeAt = now;
+    sayToast(pick(POKE_LINES));
+    waveTitleOnce();
+  }
+
+  function startIdleWatch() {
+    if (idleTimer) return;
+    idleTimer = window.setInterval(pokeIfIdle, 4000);
+  }
+
+  function stopIdleWatch() {
+    if (idleTimer) {
+      window.clearInterval(idleTimer);
+      idleTimer = null;
+    }
+  }
+
+  function startMischief() {
+    if (motionOff) return;
+    startIdleWatch();
+    if (!mischiefTimer) mischiefTimer = window.setTimeout(runMischief, 9000);
+  }
+
+  function stopMischief() {
+    if (mischiefTimer) {
+      window.clearTimeout(mischiefTimer);
+      mischiefTimer = null;
+    }
+    stopIdleWatch();
+    clearToasts();
+    var t = document.querySelector(".card-title");
+    if (t) t.classList.remove("wave-once");
+    var r = document.getElementById("avatar-ring");
+    if (r) r.classList.remove("orbit-reverse");
+    document.title = ORIGINAL_TITLE;
+  }
+
+  document.addEventListener("pointermove", bumpActivity, { passive: true });
+  document.addEventListener("pointerdown", bumpActivity, { passive: true });
+  document.addEventListener("touchstart", bumpActivity, { passive: true });
+  document.addEventListener("touchmove", bumpActivity, { passive: true });
+  document.addEventListener("wheel", bumpActivity, { passive: true });
+  document.addEventListener("keydown", bumpActivity);
+
+  /* 切走标签页就喊你回来 */
+  document.addEventListener("visibilitychange", function () {
+    if (motionOff) return;
+    if (document.hidden) document.title = "别走！猫咪在等你… 🐾";
+    else document.title = ORIGINAL_TITLE;
+  });
+  // 有些浏览器切回时不发 visibilitychange，用 focus 再兜底一次
+  window.addEventListener("focus", function () {
+    if (!motionOff && !document.hidden) document.title = ORIGINAL_TITLE;
+  });
+
+  /* 头像被戳时冒出嫌弃小气泡 */
+  function avatarKao() {
+    if (!avatarRing) return;
+    var old = avatarRing.querySelector(".avatar-kao");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var b = document.createElement("span");
+    b.className = "avatar-kao";
+    b.setAttribute("aria-hidden", "true");
+    b.textContent = pick(KAO_FACES);
+    avatarRing.appendChild(b);
+    window.setTimeout(function () {
+      if (b.parentNode) b.parentNode.removeChild(b);
+    }, 1250);
+  }
+
+  /* 页脚的小爱心也有小脾气 */
+  var footerHeart = document.getElementById("footer-heart");
+  var heartCount = 0;
+  if (footerHeart) {
+    footerHeart.addEventListener("click", function () {
+      heartCount++;
+      sayToast(pick(["爱心 +1！", "♡ 已收到！", "谢谢投喂！", "嘘——这是个秘密按钮"]));
+      if (heartCount % 3 === 0) sayStatus("💖", "爱心能量满啦！");
+      if (motionOff) return;
+      var rect = footerHeart.getBoundingClientRect();
+      burst(rect.left + rect.width / 2, rect.top + rect.height / 2, {
+        count: 10,
+        emojis: ["💖", "♡", "💕", "🎀"],
+        spreadMin: 26,
+        spreadMax: 72,
+        sizeMin: 12,
+        sizeMax: 20
       });
     });
   }
@@ -1063,7 +1325,8 @@
     // 这几个有自己的专属特效，别再重复撒一遍
     if (hit.id === "avatar-ring" || hit.id === "motion-toggle" ||
         hit.id === "theme-toggle" || hit.id === "kaomoji" ||
-        hit.id === "now-card" || hit.classList.contains("chip") ||
+        hit.id === "now-card" || hit.id === "footer-heart" ||
+        hit.classList.contains("chip") ||
         hit.classList.contains("card--birthday")) return;
 
     var count = hit.closest(".socials") ? 5 : 7;
@@ -1084,15 +1347,14 @@
   var avatarHint = document.getElementById("avatar-hint");
   var avatarClicks = 0;
   var avatarResetTimer = null;
+  var AVATAR_HINTS = ["喵？", "还戳！", "别…别戳了！", "再 1 下就下雨！", "下雨啦！！"];
 
   if (avatarRing) {
     avatarRing.addEventListener("click", function (e) {
       avatarClicks++;
 
       if (avatarHint) {
-        avatarHint.textContent = avatarClicks >= 5
-          ? "喵喵喵！♡"
-          : "再戳 " + (5 - avatarClicks) + " 下…";
+        avatarHint.textContent = AVATAR_HINTS[Math.min(avatarClicks, 5) - 1];
       }
       window.clearTimeout(avatarResetTimer);
 
@@ -1110,7 +1372,12 @@
         }, 8000);
       }
 
-      sayStatus("🐱", pick(["喵！", "摸摸头～", "果果在这里！", "喵呜～"]));
+      sayStatus("🐱", pick(["喵！", "摸摸头～", "果果在这里！", "喵呜～", "刚把你当成鱼了", "正在发呆…（勿扰）"]));
+
+      if (!motionOff) {
+        avatarKao();
+        if (Math.random() < 0.45) sayToast(pick(AVATAR_TOASTS));
+      }
 
       if (motionOff) return;
 
@@ -1138,5 +1405,6 @@
     startStatus();
     startAmbient();
     startCatWalk();
+    startMischief();
   }
 })();

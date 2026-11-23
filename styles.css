@@ -1675,6 +1675,117 @@ html[data-motion="off"] .toasts { display: none; }
 }
 
 /* ==========================================================================
+   时刻都在动：呼吸卡片、浮动的图标与全屏星光
+   ========================================================================== */
+
+/* 卡片错开节奏地轻轻起伏 */
+.card {
+  animation: rise-in 0.6s var(--ease-out) backwards,
+             card-breathe 7s ease-in-out 1.6s infinite;
+}
+.card--hero { animation-delay: 0.16s, 2.4s; }
+.card--birthday { animation-delay: 0.24s, 3.2s; }
+.card--hobby { animation-delay: 0.32s, 4s; }
+.card--about { animation-delay: 0.4s, 4.8s; }
+@keyframes card-breathe {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -2.5px; }
+}
+
+/* 图标自己轻轻浮着 */
+.ico {
+  animation: icon-float 4.6s ease-in-out infinite;
+}
+@keyframes icon-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -2px; }
+}
+
+/* 社交链接一个接一个地轻轻浮动 */
+.socials a {
+  animation: social-bob 5.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.18s);
+}
+@keyframes social-bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -1.5px; }
+}
+
+/* 爱好 emoji 自己扭一扭（「仍在寻找…」保持星光闪烁） */
+.chip-emoji {
+  animation: chip-emoji-idle 4.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.25s);
+}
+@keyframes chip-emoji-idle {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  50%      { translate: 0 -2px; rotate: 6deg; }
+}
+
+/* 右上角按钮外圈一直呼吸 */
+.round-btn::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 1.5px solid var(--pink-mid);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: halo-breathe 3.6s ease-in-out infinite;
+}
+@keyframes halo-breathe {
+  0%, 100% { opacity: 0.12; scale: 0.9; }
+  50%      { opacity: 0.5; scale: 1.06; }
+}
+
+/* 品牌名颜色轻轻呼吸 */
+.brand-text {
+  animation: brand-pulse 5s ease-in-out infinite;
+}
+@keyframes brand-pulse {
+  0%, 100% { color: var(--ink); }
+  50%      { color: var(--accent-ink); }
+}
+
+/* 整个白色面板外围有一圈呼吸的柔光 */
+.wrap::before {
+  content: "";
+  position: absolute;
+  inset: -8px 3% -14px;
+  z-index: 0;
+  border-radius: 44px;
+  background: radial-gradient(58% 55% at 50% 42%, var(--glow), transparent 75%);
+  filter: blur(20px);
+  opacity: 0.55;
+  pointer-events: none;
+  animation: aura-breathe 6s ease-in-out infinite;
+}
+@keyframes aura-breathe {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 0.65; }
+}
+
+/* 滚动时背景有视差（JS 更新 --scroll-y） */
+.bg-emoji span {
+  translate: 0 calc(var(--scroll-y, 0px) * -0.07);
+}
+.bg-stars {
+  translate: 0 calc(var(--scroll-y, 0px) * -0.04);
+}
+.blob {
+  translate: calc(var(--par-x, 0) * 16px)
+             calc(var(--par-y, 0) * 12px + var(--scroll-y, 0px) * -0.1);
+}
+
+/* 全屏星光流画布 */
+.ambient-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+html[data-motion="off"] .ambient-canvas { display: none; }
+
+/* ==========================================================================
    减少动态效果 / 手动暂停
    ========================================================================== */
 

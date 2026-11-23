@@ -171,6 +171,7 @@
     startAmbient();
     startCatWalk();
     startMischief();
+    startCanvas();
   }
 
   function applyMotion() {
@@ -184,9 +185,11 @@
       stopCatRain();
       stopCatWalk();
       stopMischief();
+      stopCanvas();
       hidePet();
       root.style.setProperty("--par-x", "0");
       root.style.setProperty("--par-y", "0");
+      root.style.setProperty("--scroll-y", "0px");
     }
   }
 
@@ -447,7 +450,7 @@
   function startKaomoji() {
     if (!kao || motionOff) return;
     stopKaomoji();
-    kaoTimer = window.setInterval(function () { swapKaomoji(false); }, 3500);
+    kaoTimer = window.setInterval(function () { swapKaomoji(false); }, 2600);
   }
 
   if (kao) {
@@ -529,12 +532,12 @@
 
   function renderStatus(item, hold) {
     typeStatus(item);
-    holdStatus(hold || 6500);
+    holdStatus(hold || 4800);
   }
 
   function nextStatus() {
     statusIndex = (statusIndex + 1) % STATUS.length;
-    renderStatus(STATUS[statusIndex], 6500);
+    renderStatus(STATUS[statusIndex], 4800);
   }
 
   // 别的互动可以插播一句，过几秒再回到轮播
@@ -550,7 +553,7 @@
     if (!statusStarted) {
       statusStarted = true;
       statusIndex = 0;
-      renderStatus(STATUS[0], 6500);
+      renderStatus(STATUS[0], 4800);
     } else {
       renderStatus(STATUS[statusIndex], 6500);
     }
@@ -829,33 +832,56 @@
      ====================================================================== */
 
   var ambientTimer = null;
+  var ambientTick = 0;
 
-  function ambientHeart() {
-    if (motionOff || document.hidden || !avatarRing) return;
+  function floatDrift(x, y, emojis, sizeMin, sizeMax) {
+    if (motionOff || document.hidden) return;
     var layer = ensureFx();
     if (!layer) return;
-    var rect = avatarRing.getBoundingClientRect();
+    if (layer.childElementCount > 70 && layer.firstChild) {
+      layer.removeChild(layer.firstChild);
+    }
     var el = document.createElement("span");
     el.className = "fx";
-    el.textContent = pick(["♡", "💖", "✨", "🐾", "⭐"]);
-    el.style.fontSize = rand(10, 16).toFixed(1) + "px";
+    el.textContent = pick(emojis || ["♡", "💖", "✨", "🐾", "⭐"]);
+    el.style.fontSize = rand(sizeMin || 9, sizeMax || 15).toFixed(1) + "px";
     el.style.color = "var(--spark)";
-    el.style.setProperty("--x", (rect.left + rect.width * rand(0.25, 0.75)).toFixed(1) + "px");
-    el.style.setProperty("--y", (rect.top + rect.height * rand(0.55, 0.85)).toFixed(1) + "px");
-    el.style.setProperty("--dx", rand(-14, 14).toFixed(1) + "px");
-    el.style.setProperty("--dy", rand(-90, -50).toFixed(1) + "px");
+    el.style.setProperty("--x", x.toFixed(1) + "px");
+    el.style.setProperty("--y", y.toFixed(1) + "px");
+    el.style.setProperty("--dx", rand(-16, 16).toFixed(1) + "px");
+    el.style.setProperty("--dy", rand(-110, -55).toFixed(1) + "px");
     el.style.setProperty("--rot", Math.round(rand(-90, 90)) + "deg");
     el.style.setProperty("--s", rand(0.6, 1).toFixed(2));
-    el.style.setProperty("--dur", Math.round(rand(1600, 2600)) + "ms");
+    el.style.setProperty("--dur", Math.round(rand(1800, 3000)) + "ms");
     layer.appendChild(el);
     el.addEventListener("animationend", function () {
       if (el.parentNode) el.parentNode.removeChild(el);
     });
   }
 
+  function ambientHeart() {
+    if (!avatarRing) return;
+    var rect = avatarRing.getBoundingClientRect();
+    floatDrift(rect.left + rect.width * rand(0.25, 0.75),
+               rect.top + rect.height * rand(0.55, 0.85));
+  }
+
+  // 整页时不时冒一颗小星星：哪里都有动静
+  function pageSparkle() {
+    floatDrift(rand(window.innerWidth * 0.05, window.innerWidth * 0.95),
+               rand(window.innerHeight * 0.08, window.innerHeight * 0.9),
+               ["✦", "♡", "✨", "🐾"], 8, 14);
+  }
+
+  function ambientTickFn() {
+    ambientTick++;
+    if (ambientTick % 3 === 0) ambientHeart();
+    else pageSparkle();
+  }
+
   function startAmbient() {
     if (ambientTimer || motionOff) return;
-    ambientTimer = window.setInterval(ambientHeart, 4200);
+    ambientTimer = window.setInterval(ambientTickFn, 1500);
   }
 
   function stopAmbient() {
@@ -864,6 +890,115 @@
       ambientTimer = null;
     }
   }
+
+  /* 全屏星光流：一层时刻流动的小星星画布 */
+  var ambientCanvas = null;
+  var ambientCtx = null;
+  var ambientParts = [];
+  var canvasRaf = 0;
+  var canvasLastTs = 0;
+
+  function canvasResize() {
+    if (!ambientCanvas) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    ambientCanvas.width = Math.max(1, Math.round(window.innerWidth * dpr));
+    ambientCanvas.height = Math.max(1, Math.round(window.innerHeight * dpr));
+    ambientCanvas.style.width = window.innerWidth + "px";
+    ambientCanvas.style.height = window.innerHeight + "px";
+    ambientCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function canvasBuild() {
+    ambientParts = [];
+    var target = window.innerWidth < 620 ? 26 : 44;
+    var emojis = ["♡", "✦", "✧", "🐾", "🌸", "⭐", "🍫", "🥛"];
+    for (var i = 0; i < target; i++) {
+      ambientParts.push({
+        x: rand(0, 1),
+        y: rand(0, 1),
+        s: rand(7, 14),
+        sp: rand(0.06, 0.22),
+        phase: rand(0, Math.PI * 2),
+        tw: rand(1.5, 3.5),
+        e: emojis[(Math.random() * emojis.length) | 0]
+      });
+    }
+  }
+
+  function canvasLoop(ts) {
+    canvasRaf = 0;
+    if (!ambientCanvas || motionOff) return;
+    if (!canvasLastTs) canvasLastTs = ts;
+    var dt = Math.min(50, ts - canvasLastTs) / 16.7;
+    canvasLastTs = ts;
+
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var dark = root.getAttribute("data-theme") === "dark";
+    var tint = dark ? "255,205,225" : "255,120,150";
+    ambientCtx.clearRect(0, 0, w, h);
+    for (var i = 0; i < ambientParts.length; i++) {
+      var p = ambientParts[i];
+      p.y -= p.sp * 0.016 * dt;
+      p.x += Math.sin(ts * 0.001 * p.tw + p.phase) * 0.00045 * dt;
+      if (p.y < -0.06) { p.y = 1.06; p.x = rand(0, 1); }
+      if (p.x < -0.06) p.x = 1.04;
+      if (p.x > 1.06) p.x = -0.04;
+      var alpha = 0.2 + 0.3 * (0.5 + 0.5 * Math.sin(ts * 0.001 * p.tw * 2 + p.phase));
+      ambientCtx.globalAlpha = alpha;
+      ambientCtx.fillStyle = "rgba(" + tint + ",1)";
+      ambientCtx.font = Math.round(p.s) + "px sans-serif";
+      ambientCtx.fillText(p.e, p.x * w, p.y * h);
+    }
+    ambientCtx.globalAlpha = 1;
+    ambientCanvas.__frames = (ambientCanvas.__frames || 0) + 1;
+    canvasRaf = requestAnimationFrame(canvasLoop);
+  }
+
+  function startCanvas() {
+    if (motionOff || ambientCanvas) return;
+    ambientCanvas = document.createElement("canvas");
+    ambientCanvas.className = "ambient-canvas";
+    ambientCanvas.setAttribute("aria-hidden", "true");
+    document.body.appendChild(ambientCanvas);
+    ambientCtx = ambientCanvas.getContext("2d");
+    canvasResize();
+    canvasBuild();
+    canvasLastTs = 0;
+    canvasRaf = requestAnimationFrame(canvasLoop);
+  }
+
+  function stopCanvas() {
+    if (canvasRaf) {
+      cancelAnimationFrame(canvasRaf);
+      canvasRaf = 0;
+    }
+    if (ambientCanvas && ambientCanvas.parentNode) {
+      ambientCanvas.parentNode.removeChild(ambientCanvas);
+    }
+    ambientCanvas = null;
+    ambientCtx = null;
+    ambientParts = [];
+  }
+
+  window.addEventListener("resize", function () {
+    if (!ambientCanvas) return;
+    canvasResize();
+    canvasBuild();
+  });
+
+  /* 滚动视差：背景层随滚动轻微位移 */
+  var scrollRaf = 0;
+  function updateScrollPar() {
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(function () {
+      scrollRaf = 0;
+      if (motionOff) return;
+      root.style.setProperty("--scroll-y", window.scrollY.toFixed(0) + "px");
+    });
+  }
+  window.addEventListener("scroll", updateScrollPar, { passive: true });
+  window.addEventListener("resize", updateScrollPar);
 
   /* ======================================================================
      10.55 偶尔从面板底部散步过去的猫猫
@@ -900,18 +1035,18 @@
     var anim = panelCatEl.animate([
       { transform: "translateX(-32px)" },
       { transform: "translateX(" + (width - 20) + "px)" }
-    ], { duration: 9000, easing: "linear", fill: "forwards" });
+    ], { duration: 7500, easing: "linear", fill: "forwards" });
 
     if (anim && anim.onfinish !== undefined) anim.onfinish = removePanelCat;
-    catWalkRemoveTimer = window.setTimeout(removePanelCat, 9400);
+    catWalkRemoveTimer = window.setTimeout(removePanelCat, 7900);
   }
 
   function startCatWalk() {
     if (motionOff) return;
     if (catWalkStartTimer) window.clearTimeout(catWalkStartTimer);
     if (catWalkTimer) window.clearInterval(catWalkTimer);
-    catWalkStartTimer = window.setTimeout(walkCat, 9000);
-    catWalkTimer = window.setInterval(walkCat, 24000);
+    catWalkStartTimer = window.setTimeout(walkCat, 6000);
+    catWalkTimer = window.setInterval(walkCat, 13000);
   }
 
   function stopCatWalk() {
@@ -1172,7 +1307,7 @@
   function runMischief() {
     mischiefTimer = null;
     if (motionOff || document.hidden) {
-      mischiefTimer = window.setTimeout(runMischief, rand(20000, 34000));
+      mischiefTimer = window.setTimeout(runMischief, rand(14000, 22000));
       return;
     }
     if (mischiefFirst) {
@@ -1204,8 +1339,8 @@
   function pokeIfIdle() {
     if (motionOff || document.hidden) return;
     var now = Date.now();
-    if (now - lastActivity < 18000) return;
-    if (now - lastPokeAt < 32000) return;
+    if (now - lastActivity < 12000) return;
+    if (now - lastPokeAt < 20000) return;
     lastPokeAt = now;
     sayToast(pick(POKE_LINES));
     waveTitleOnce();
@@ -1226,7 +1361,7 @@
   function startMischief() {
     if (motionOff) return;
     startIdleWatch();
-    if (!mischiefTimer) mischiefTimer = window.setTimeout(runMischief, 9000);
+    if (!mischiefTimer) mischiefTimer = window.setTimeout(runMischief, 5000);
   }
 
   function stopMischief() {
@@ -1406,5 +1541,6 @@
     startAmbient();
     startCatWalk();
     startMischief();
+    startCanvas();
   }
 })();
